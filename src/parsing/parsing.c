@@ -56,22 +56,33 @@ int get_precedence(t_token_type type)
 	return (-1);
 }
 
+void handle_parentheses(t_token **token, t_ast **node)
+{
+	(*token) = (*token)->next;
+	(*node) = expr(3, token);
+	if ((*token) && (*token)->type == T_CPAR)
+		(*token) = (*token)->next;
+	else
+		error_indicator(1, "parenthesis do not close");
+}
+
 void create_redir_node(t_token **token, t_ast **redir_node)
 {
-	// if ((*token)->prev && ((*token)->prev->type == T_DLESS))
-	// {
-	// 	if ((*token)->type == T_IDENTIFIER)
-	// 	{
-	// 		(*redir_node)->heredoc = ft_strdup((*token)->value);
-	// 		if (!(*redir_node)->heredoc)
-	// 			error_indicator(1, "Failed to duplicate heredoc");
-	// 		(*token) = (*token)->next;
-	// 	}
-	// 	else
-	// 		error_indicator(1, "missing heredoc delimiter after << operator");
-	// }
-	if ((*token)->type == T_IDENTIFIER)
+	if ((*token)->type == T_DLESS)
 	{
+		(*token) = (*token)->next;
+		if (*token && (*token)->type == T_IDENTIFIER)
+		{
+			(*redir_node)->heredoc = ft_strdup((*token)->value);
+			if (!(*redir_node)->heredoc)
+				error_indicator(1, "Failed to duplicate heredoc");
+		}
+		else
+			error_indicator(1, "missing heredoc delimiter after << operator");
+	}
+	else if ((*token)->next->type == T_IDENTIFIER)
+	{
+		(*token) = (*token)->next;
 		(*redir_node)->filename = ft_strdup((*token)->value);
 		if (!(*redir_node)->filename)
 			error_indicator(1, "Failed to duplicate filename");
@@ -103,7 +114,6 @@ void create_command_node(t_token **token, t_ast **node)
 	if (after_token && (after_token->type == T_LESS || after_token->type == T_GREAT || after_token->type == T_DGREAT || after_token->type == T_DLESS))
 	{
 		create_node(after_token->type, &redir_node);
-		after_token = after_token->next;
 		create_redir_node(&after_token, &redir_node);
 		while (after_token && (after_token->type == T_IDENTIFIER))
 		{
@@ -123,7 +133,7 @@ void create_command_node(t_token **token, t_ast **node)
         curr_token = curr_token->next;
         i++;
     }
-    if (curr_token && (curr_token->type == T_LESS || curr_token->type == T_GREAT || curr_token->type == T_DGREAT || curr_token->type == T_DLESS))
+    if (curr_token && (curr_token->type == T_LESS || curr_token->type == T_GREAT || curr_token->type == T_DGREAT))
     {
         if (curr_token->next && curr_token->next->type == T_IDENTIFIER)
         {
@@ -139,22 +149,12 @@ void create_command_node(t_token **token, t_ast **node)
         }
     }
     (*node)->args[arg_count] = NULL;
-	*token = curr_token;
+	*token = after_token;
 	if (redir_node)
 	{
 		redir_node->left = *node;
 		*node = redir_node;
 	}
-}
-
-void handle_parentheses(t_token **token, t_ast **node)
-{
-	(*token) = (*token)->next;
-	(*node) = expr(3, token);
-	if ((*token) && (*token)->type == T_CPAR)
-		(*token) = (*token)->next;
-	else
-		error_indicator(1, "parenthesis do not close");
 }
 
 t_ast *nud(t_token **token)
@@ -167,7 +167,6 @@ t_ast *nud(t_token **token)
     while (*token && ((*token)->type == T_LESS || (*token)->type == T_GREAT || (*token)->type == T_DGREAT || (*token)->type == T_DLESS))
     {
         create_node((*token)->type, &redir_node);
-        *token = (*token)->next;
         create_redir_node(token, &redir_node);
         if (prev_redir_node)
             prev_redir_node->left = redir_node;
@@ -197,12 +196,14 @@ t_ast *led(t_ast *left, t_token **token)
 	{
 		create_node((*token)->type, &node);
 		node->left = left;
-		*token = (*token)->next;
 
 		if(prec == 2)
 			create_redir_node(token, &node);
 		else
+		{
+			*token = (*token)->next;
             node->right = expr(prec, token);
+		}
 	}
 	return (node);
 }

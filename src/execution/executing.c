@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:09:27 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/12 16:02:18 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/12 23:01:34 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void redirect(t_ast *ast)
 {
 	int fd;
 	int res;
-
+	
 	if (ast->type == N_LESS)
 	{
 		fd = open(ast->filename, O_RDONLY);
@@ -50,7 +50,7 @@ void redirect(t_ast *ast)
 			ft_error(ast, "redirection");
 		}
 	}
-	else
+	else if (ast->type == N_GREAT)
 	{
 		fd = open(ast->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
@@ -62,7 +62,20 @@ void redirect(t_ast *ast)
 			ft_error(ast, "redirection");
 		}
 	}
-	close (fd);
+	else
+	{
+		fd = open(ast->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fd < 0)
+			ft_error(ast, "redirection");
+		res = dup2(fd, STDOUT_FILENO);
+		if (res < 0)
+		{
+			close(fd);
+			ft_error(ast, "redirection");
+		}
+	}
+	if (fd >= 0)
+		close (fd);
 }
 
 void pipe_execution(t_ast *ast)
@@ -141,7 +154,7 @@ void	evaluate_ast(t_ast *ast)
 	int	std_in;
 	int	std_out;
 
-	if (ast->type == N_LESS || ast->type == N_GREAT)
+	if (ast->type == N_LESS || ast->type == N_GREAT || ast->type == N_DGREAT)
 	{
 		std_in = dup(STDIN_FILENO);
 		std_out = dup(STDOUT_FILENO);
@@ -154,7 +167,7 @@ void	evaluate_ast(t_ast *ast)
 		close(std_in);
 		close(std_out);
 	}
-	if (ast->type == N_DGREAT || ast->type == N_DLESS)
+	if (ast->type == N_DLESS)
 		ft_printf("nothing yet\n");
 	if (ast->type == N_PIPE)
 		pipe_execution(ast);
