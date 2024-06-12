@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/12 16:03:14 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/12 19:30:07 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int	main(void)
 		add_history(input);
 		token = get_token(input, prompt);
 		tmp = token;
-		// print_token(tmp);
+		print_token(tmp);
 		ast = parse(&token, input, prompt);
-		// printf("\n\n");
-		// print_ast(ast);
+		printf("\n\n");
+		print_ast(ast);
 		evaluate_ast(ast);
 		free_all(ast);
 	}

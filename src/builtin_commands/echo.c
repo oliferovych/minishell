@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:53:39 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/11 17:29:33 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/12 21:15:44 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,23 @@
 
 void	ft_echo(char **arguments)
 {
-	if (strcmp(arguments[1], "-n") == 0)
-		ft_printf("%s", arguments[2]);
-	else
-		ft_printf("%s\n", arguments[1]);
+	int i;
+	int flag;
+
+	i = 1;
+	flag = 0;
+	if (ft_strnstr(arguments[i], "-n", 2) != NULL)
+	{
+		flag++;
+		i++;
+	}
+	while(arguments[i + 1])
+	{
+		ft_printf("%s ", arguments[i]);
+		i++;
+	}
+	ft_printf("%s", arguments[i]);
+	if (flag == 0)
+		ft_printf("\n");
+	
 }
