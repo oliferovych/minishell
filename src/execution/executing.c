@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:09:27 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/13 21:34:03 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/13 23:13:18 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void redirect(t_ast *ast)
 			ft_error(ast, "redirection");
 		while (1)
 		{
-			line = readline("heredoc> ");
+			line = readline("> ");
 			if (line && ft_strncmp(line, ast->heredoc, ft_strlen(line)) != 0)
 			{
 				write(fd2, line, ft_strlen(line));
@@ -81,7 +81,6 @@ void redirect(t_ast *ast)
 			close(fd);
 			ft_error(ast, "redirection");
 		}
-		unlink("heredoc_buffer");
 	}
 	else if (ast->type == N_GREAT)
 	{
@@ -111,12 +110,39 @@ void redirect(t_ast *ast)
 		close (fd);
 }
 
+int scan_for_heredoc_recursive(t_ast *ast)
+{
+	int left_result;
+	int right_result;
+	
+    if (ast == NULL)
+        return 0;
+    if (ast->type == N_DLESS)
+        return 1;
+    left_result = scan_for_heredoc_recursive(ast->left);
+    right_result = scan_for_heredoc_recursive(ast->right);
+    if (left_result || right_result)
+        return 1;
+   	else
+        return 0;
+}
+
+int scan_for_heredoc(t_ast *ast)
+{
+    return scan_for_heredoc_recursive(ast);
+}
+
+
 void pipe_execution(t_ast *ast)
 {
 	int pipefd[2];
 	pid_t pid1;
 	pid_t pid2;
 
+	if (scan_for_heredoc(ast->left))
+		return (evaluate_ast(ast->left));
+	else if (scan_for_heredoc(ast->right))
+		return (evaluate_ast(ast->right));
 	if (pipe(pipefd) == -1)
 		ft_error(ast, "pipe");
 	pid1 = fork();
@@ -152,13 +178,20 @@ void and_or_execution(t_ast *ast)
 	int status;
 	pid_t pid1;
 	pid_t pid2;
+	int side;
 
+	side = 0;
 	pid1 = fork();
 	if (pid1 == -1)
 		ft_error(ast, "fork");
+	if (scan_for_heredoc(ast->right))
+		side++;
 	if (pid1 == 0)
 	{
-		evaluate_ast(ast->left);
+		if (scan_for_heredoc(ast->right))
+			evaluate_ast(ast->right);
+		else
+			evaluate_ast(ast->left);
 		exit(0);
 	}
 	else
@@ -172,7 +205,10 @@ void and_or_execution(t_ast *ast)
 				ft_error(ast, "fork");
 			if (pid2 == 0)
 			{
-				evaluate_ast(ast->right);
+				if (side != 0)
+					evaluate_ast(ast->left);
+				else
+					evaluate_ast(ast->right);
 				exit(0);
 			}
 			else
