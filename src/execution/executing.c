@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:09:27 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/12 23:01:34 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/13 21:34:03 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ void	command_execute(t_ast *ast)
 void redirect(t_ast *ast)
 {
 	int fd;
+	int fd2;
 	int res;
+	char *line;
 	
 	if (ast->type == N_LESS)
 	{
@@ -49,6 +51,37 @@ void redirect(t_ast *ast)
 			close(fd);
 			ft_error(ast, "redirection");
 		}
+	}
+	else if (ast->type == N_DLESS)
+	{
+		fd2 = open("heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
+		if (fd2 < 0)
+			ft_error(ast, "redirection");
+		while (1)
+		{
+			line = readline("heredoc> ");
+			if (line && ft_strncmp(line, ast->heredoc, ft_strlen(line)) != 0)
+			{
+				write(fd2, line, ft_strlen(line));
+				write(fd2, "\n", 1);
+			}
+			else
+				break;
+			if (line)
+				free(line);
+		}
+		
+		close(fd2);
+		fd = open("heredoc_buffer", O_RDONLY);
+		if (fd < 0)
+			ft_error(ast, "redirection");
+		res = dup2(fd, STDIN_FILENO);
+		if (res < 0)
+		{
+			close(fd);
+			ft_error(ast, "redirection");
+		}
+		unlink("heredoc_buffer");
 	}
 	else if (ast->type == N_GREAT)
 	{
@@ -154,7 +187,7 @@ void	evaluate_ast(t_ast *ast)
 	int	std_in;
 	int	std_out;
 
-	if (ast->type == N_LESS || ast->type == N_GREAT || ast->type == N_DGREAT)
+	if (ast->type == N_LESS || ast->type == N_GREAT || ast->type == N_DGREAT || ast->type == N_DLESS)
 	{
 		std_in = dup(STDIN_FILENO);
 		std_out = dup(STDOUT_FILENO);
@@ -162,13 +195,13 @@ void	evaluate_ast(t_ast *ast)
 			ft_error(ast, "dup");
 		redirect(ast);
 		evaluate_ast(ast->left);
+		if (access("heredoc_buffer", F_OK) != -1)
+			unlink("heredoc_buffer");
 		dup2(std_in, STDIN_FILENO);
 		dup2(std_out, STDOUT_FILENO);
 		close(std_in);
 		close(std_out);
 	}
-	if (ast->type == N_DLESS)
-		ft_printf("nothing yet\n");
 	if (ast->type == N_PIPE)
 		pipe_execution(ast);
 	if (ast->type == N_AND || ast->type == N_OR)
