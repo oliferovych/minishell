@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 17:08:26 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/14 18:13:24 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/14 20:24:11 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ void	free_export(char **export)
 	free(export);
 }
 
-void	free_all(t_ast *ast)
+void	free_all(t_ast *ast, int flag)
 {
-	free_export(ast->ms.exp);
-	free_environment(ast->ms.env);
+	// free_export(ast->ms.exp);
+	if (flag)
+		free_environment(ast->ms.env);
 	free(ast->ms.input);
 	free(ast->ms.prompt);
 	free_tokens(ast->ms.token);

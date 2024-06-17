@@ -191,7 +191,7 @@ t_ast	*expr(int prec, t_token **token)
 	return (left);
 }
 
-t_ast	*parse(t_token **token, char *input, char *prompt)
+t_ast	*parse(t_token **token, char *input, char *prompt, char **env)
 {
 	t_ast	*node;
 	t_token	*tmp;
@@ -204,6 +204,7 @@ t_ast	*parse(t_token **token, char *input, char *prompt)
 		node->ms.token = tmp;
 		node->ms.input = input;
 		node->ms.prompt = prompt;
+		node->ms.env = env;
 	}
 	if (error_indicator(0, NULL) > 0)
 		ft_error(node, "parsing");
