@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:59:59 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/14 20:26:30 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:04:24 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ void	ft_execute_builtin(t_ast *ast, int builtin)
 	else if (builtin == PWD)
 		ft_pwd();
 	else if (builtin == ECHO)
-		ft_echo(ast->args);
+		ft_echo(ast);
 	else if (builtin == ENV)
 		ft_env(ast);
-
-	// else if (strcmp(arguments[0], "exit") == 0)
-	// else if (strcmp(arguments[0], "exit") == 0)
+	else if (builtin == UNSET)
+		ft_unset(ast);
+	else if (builtin == EXPORT)
+		ft_exp(ast);
 	// else if (strcmp(arguments[0], "exit") == 0)
 	// else if (strcmp(arguments[0], "exit") == 0)
 	// else if (strcmp(arguments[0], "exit") == 0)
