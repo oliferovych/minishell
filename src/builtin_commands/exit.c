@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:38:22 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/12 15:34:29 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/14 20:24:39 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ void	ft_exit(t_ast *ast)
 			exit_code = 255;
 		else
 			exit_code = ft_atoi(ast->args[1]);
-		free_all(ast);
+		free_all(ast, 1);
 		exit(exit_code);
 	}
 	else
 	{
-		free_all(ast);
+		free_all(ast, 1);
 		exit(exit_code);
 	}
 }

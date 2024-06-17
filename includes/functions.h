@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/14 17:56:53 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/14 20:24:24 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void			free_tokens(t_token *token);
 int				ft_isspace(int c);
 
 //PARSING
-t_ast			*parse(t_token **token, char *input, char *prompt);
+t_ast			*parse(t_token **token, char *input, char *prompt, char **env);
 void			print_ast(t_ast *node);
 void			free_ast(t_ast *node);
 int				error_indicator(int i, char *str);
@@ -47,9 +47,10 @@ void			ch_dir(char *path);
 void			ft_pwd(void);
 void			ft_echo(char **arguments);
 void			ft_exit(t_ast *ast);
+void			ft_env(t_ast *ast);
 
 //UTILITIES
-void			free_all(t_ast *ast);
+void			free_all(t_ast *ast, int flag);
 void			ft_error(t_ast *ast, char *str);
 
 #endif

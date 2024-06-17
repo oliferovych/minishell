@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:59:59 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/11 17:29:36 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/14 20:26:30 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ void	ft_execute_builtin(t_ast *ast, int builtin)
 		ft_pwd();
 	else if (builtin == ECHO)
 		ft_echo(ast->args);
+	else if (builtin == ENV)
+		ft_env(ast);
+
 	// else if (strcmp(arguments[0], "exit") == 0)
 	// else if (strcmp(arguments[0], "exit") == 0)
 	// else if (strcmp(arguments[0], "exit") == 0)
