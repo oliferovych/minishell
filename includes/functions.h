@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/14 20:24:24 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:14:34 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,23 @@ void			ft_execute_builtin(t_ast *ast, int builtin);
 char			**env_init(char **input_env);
 char			**exp_init(char **environment);
 void			print_env(char **environment);
+void			ft_del_var(int i, char **env);
+void			ft_add_var(char *var, char ***env);
+int				variable_exists(char **env, char *var);
 
 //BUILTIN COMMANDS
 void			ch_dir(char *path);
 void			ft_pwd(void);
-void			ft_echo(char **arguments);
+void			ft_echo(t_ast *ast);
 void			ft_exit(t_ast *ast);
 void			ft_env(t_ast *ast);
+void			ft_unset(t_ast *ast);
+void			ft_exp(t_ast *ast);
 
 //UTILITIES
 void			free_all(t_ast *ast, int flag);
 void			ft_error(t_ast *ast, char *str);
+int				compare_till_in_1(char *str1, char *str2, char c);
+int				compare_till(char *str1, char *str2, char c);
 
 #endif
