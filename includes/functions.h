@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/17 17:14:34 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/19 14:44:56 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_ast			*parse(t_token **token, char *input, char *prompt, char **env);
 void			print_ast(t_ast *node);
 void			free_ast(t_ast *node);
 int				error_indicator(int i, char *str);
-t_ast			*expr(int prec, t_token **token);
+t_ast			*expr(int prec, t_token **token, t_data *data);
 
 //EXECUTION
 void			evaluate_ast(t_ast *ast);

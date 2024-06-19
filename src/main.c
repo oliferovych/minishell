@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/17 15:00:11 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/19 14:46:26 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	main(int argc, char **argv, char **envp)
 		// tmp = token;
 		// print_token(tmp);
 		ast = parse(&token, input, prompt, env);
-		// printf("\n\n");
-		// print_ast(ast);
+		printf("\n\n");
+		print_ast(ast);
 		evaluate_ast(ast);
 		env = ast->ms.env;
 		free_all(ast, 0);
