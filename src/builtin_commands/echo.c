@@ -12,6 +12,22 @@
 
 #include "../../includes/minishell.h"
 
+void	print_strcutoff_front(const char *str, char c)
+{
+	int		i;
+
+	i = 0;
+	while(str[i] != '\0' && str[i] != c)
+		i++;
+	if(str[i] == c)
+		i++;
+	while(str[i] != '\0')
+	{
+		ft_putchar_fd(str[i], 1);
+		i++;
+	}
+}
+
 void	ft_echo(t_ast *ast)
 {
 	int		i;
@@ -27,12 +43,13 @@ void	ft_echo(t_ast *ast)
 		{
 			var = ft_strtrim(ast->args[i], "$");
 			if (variable_exists(ast->ms.env, var))
-				ft_printf("%s", ast->ms.env[variable_exists(ast->ms.env, var)]);
+				print_strcutoff_front(ast->ms.env[variable_exists(ast->ms.env, var)], '=');
 			else
 				ft_printf("%s", ast->args[i]);
 		}
 		else
 			ft_printf("%s", ast->args[i]);
+		write (1, " ", 1);
 		i++;
 	}
 	write(1, "\n", 1);
