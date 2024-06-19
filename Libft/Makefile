@@ -90,17 +90,17 @@ MAGENTA		=	\033[0;95m
 CYAN		=	\033[2;96m
 WHITE		=	\033[0;97m
 
-all:
-				@echo "\n$(BOLD_CYAN)Starting $(BOLD_WHITE)[${NAME}] $(BOLD_CYAN)compilation..$(DEF_COLOR)\n"
-				@Make ${NAME}
-				@echo "\n$(BOLD_GREEN)${NAME} DONE!\n$(DEF_COLOR)"
-
 $(NAME):		$(OBJS)
 				@ar -crs ${NAME} ${OBJS}
 				@echo "🔗 $(CYAN) ar -crs ${NAME} ${OBJS} $(DEF_COLOR)"
 
 %.o: %.c libft.h
 	@$(CC) $(CFLAGS) -c $< -o $@ -I.
+
+all:
+				@echo "\n$(BOLD_CYAN)Starting $(BOLD_WHITE)[${NAME}] $(BOLD_CYAN)compilation..$(DEF_COLOR)\n"
+				@Make ${NAME}
+				@echo "\n$(BOLD_GREEN)${NAME} DONE!\n$(DEF_COLOR)"
 
 clean:
 				@echo "\n$(BOLD_CYAN)Cleaning $(BOLD_WHITE)[${NAME}] $(BOLD_CYAN)..$(DEF_COLOR)\n"
