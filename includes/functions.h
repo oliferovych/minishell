@@ -46,7 +46,7 @@ void			ft_add_var(char *var, char ***env);
 int				variable_exists(char **env, char *var);
 
 //BUILTIN COMMANDS
-void			ch_dir(char *path);
+void			ch_dir(t_ast *ast);
 void			ft_pwd(void);
 void			ft_echo(t_ast *ast);
 void			ft_exit(t_ast *ast);
