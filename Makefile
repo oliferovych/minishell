@@ -31,7 +31,6 @@ SUBDIRS			=	parsing\
 					utilities
 
 SRC_FILES		= $(SRC_DIR)/main.c $(foreach dir, $(SUBDIRS), $(wildcard $(SRC_DIR)/$(dir)/*.c))
-
 OBJ_FILES		= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
