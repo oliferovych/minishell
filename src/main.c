@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/19 14:46:26 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:36:03 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ int	main(int argc, char **argv, char **envp)
 	char	*prompt;
 	char	**env;
 	// char	**exp;
+	// t_data	*data;
 
 	(void)argc;
 	(void)argv;
+	// data = malloc(sizeof(t_data));
 	env = env_init(envp);
 	if (!env)
 		exit(1);

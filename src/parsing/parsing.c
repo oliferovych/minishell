@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/17 15:01:17 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/19 14:45:48 by tomecker         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
 t_ast	*create_ast_node(t_node_type type, t_data *data)
@@ -53,78 +41,20 @@ void	create_node(t_token_type type, t_ast **node, t_data *data)
 		*node = create_ast_node(N_OR, data);
 }
 
-int	get_precedence(t_token_type type)
+int get_precedence(t_token_type type)
 {
 	if (type == T_IDENTIFIER)
 		return (0);
 	if (type == T_PIPE)
 		return (1);
-	if (type == T_GREAT || type == T_LESS || type == T_DGREAT
-		|| type == T_DLESS)
-		return (2);
-	if (type == T_AND || type == T_OR)
+	if (type == T_GREAT || type == T_LESS || type == T_DGREAT || type == T_DLESS)
+		return(2);
+	if	(type == T_AND || type == T_OR)
 		return (3);
 	if (type == T_OPAR || type == T_CPAR)
-		return (4);
+        return (4);
 	error_indicator(1, "precedence");
 	return (-1);
-}
-
-void	create_redir_node(t_token **token, t_ast **redir_node)
-{
-	// if ((*token)->prev && ((*token)->prev->type == T_DLESS))
-	// {
-	// 	if ((*token)->type == T_IDENTIFIER)
-	// 	{
-	// 		(*redir_node)->heredoc = ft_strdup((*token)->value);
-	// 		if (!(*redir_node)->heredoc)
-	// 			error_indicator(1, "Failed to duplicate heredoc");
-	// 		(*token) = (*token)->next;
-	// 	}
-	// 	else
-	// 		error_indicator(1, "missing heredoc delimiter after << operator");
-	// }
-	if ((*token)->type == T_IDENTIFIER)
-	{
-		(*redir_node)->filename = ft_strdup((*token)->value);
-		if (!(*redir_node)->filename)
-			error_indicator(1, "Failed to duplicate filename");
-	}
-	else
-		error_indicator(1, "Missing file for redirection");
-	*token = (*token)->next;
-}
-
-void	create_command_node(t_token **token, t_ast **node, t_data *data)
-{
-	int		i;
-	int		arg_count;
-	t_token	*curr_token;
-
-	curr_token = *token;
-	arg_count = 0;
-	i = 0;
-	(*node) = create_ast_node(N_COMMAND, data);
-	(*node)->type = N_COMMAND;
-	while (curr_token && curr_token->type == T_IDENTIFIER)
-	{
-		arg_count++;
-		curr_token = curr_token->next;
-	}
-	(*node)->args = malloc(sizeof(char *) * (arg_count + 1));
-	if (!(*node)->args)
-		error_indicator(1, "allocating args");
-	curr_token = *token;
-	while (i < arg_count)
-	{
-		(*node)->args[i] = ft_strdup(curr_token->value);
-		if (!(*node)->args[i])
-			error_indicator(1, "duplicating args");
-		curr_token = curr_token->next;
-		i++;
-	}
-	(*node)->args[arg_count] = NULL;
-	*token = curr_token;
 }
 
 void	handle_parentheses(t_token **token, t_ast **node, t_data *data)
@@ -135,6 +65,97 @@ void	handle_parentheses(t_token **token, t_ast **node, t_data *data)
 		(*token) = (*token)->next;
 	else
 		error_indicator(1, "parenthesis do not close");
+}
+
+void create_redir_node(t_token **token, t_ast **redir_node)
+{
+	if ((*token)->type == T_DLESS)
+	{
+		(*token) = (*token)->next;
+		if (*token && (*token)->type == T_IDENTIFIER)
+		{
+			(*redir_node)->heredoc = ft_strdup((*token)->value);
+			if (!(*redir_node)->heredoc)
+				error_indicator(1, "Failed to duplicate heredoc");
+		}
+		else
+			error_indicator(1, "missing heredoc delimiter after << operator");
+	}
+	else if ((*token)->next->type == T_IDENTIFIER)
+	{
+		(*token) = (*token)->next;
+		(*redir_node)->filename = ft_strdup((*token)->value);
+		if (!(*redir_node)->filename)
+			error_indicator(1, "Failed to duplicate filename");
+	}
+	else
+		error_indicator(1, "Missing file for redirection");
+	*token = (*token)->next;
+}
+
+void create_command_node(t_token **token, t_ast **node, t_data *data)
+{
+    int i;
+    int arg_count;
+    t_token *curr_token;
+    t_token *after_token;
+	t_ast *redir_node;
+
+	redir_node = NULL;
+    curr_token = *token;
+    arg_count = 0;
+    i = 0;
+    (*node) = create_ast_node(N_COMMAND, data);
+    while (curr_token && curr_token->type == T_IDENTIFIER)
+    {
+        arg_count++;
+        curr_token = curr_token->next;
+    }
+    after_token = curr_token;
+	if (after_token && (after_token->type == T_LESS || after_token->type == T_GREAT || after_token->type == T_DGREAT || after_token->type == T_DLESS))
+	{
+		create_node(after_token->type, &redir_node, data);
+		create_redir_node(&after_token, &redir_node);
+		while (after_token && (after_token->type == T_IDENTIFIER))
+		{
+			arg_count++;
+			after_token = after_token->next;
+		}
+	}
+    (*node)->args = malloc(sizeof(char *) * (arg_count + 1));
+    if (!(*node)->args)
+        error_indicator(1, "allocating args");
+    curr_token = *token;
+    while (curr_token && curr_token->type == T_IDENTIFIER)
+    {
+        (*node)->args[i] = ft_strdup(curr_token->value);
+        if (!(*node)->args[i])
+            error_indicator(1, "duplicating args");
+        curr_token = curr_token->next;
+        i++;
+    }
+    if (curr_token && (curr_token->type == T_LESS || curr_token->type == T_GREAT || curr_token->type == T_DGREAT))
+    {
+        if (curr_token->next && curr_token->next->type == T_IDENTIFIER)
+        {
+            curr_token = curr_token->next->next;
+            while (curr_token && curr_token->type == T_IDENTIFIER)
+            {
+                (*node)->args[i] = ft_strdup(curr_token->value);
+                if (!(*node)->args[i])
+                    error_indicator(1, "duplicating args");
+                curr_token = curr_token->next;
+                i++;
+            }
+        }
+    }
+    (*node)->args[arg_count] = NULL;
+	*token = after_token;
+	if (redir_node)
+	{
+		redir_node->left = *node;
+		*node = redir_node;
+	}
 }
 
 t_ast	*nud(t_token **token, t_data *data)
@@ -210,7 +231,7 @@ t_ast	*expr(int prec, t_token **token,  t_data *data)
 t_ast	*parse(t_token **token, char *input, char *prompt, char **env)
 {
 	t_ast	*node;
-	t_data *data;
+	t_data  *data;
 	
 	data = NULL;
 	node = NULL;
