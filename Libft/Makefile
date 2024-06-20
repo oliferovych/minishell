@@ -6,7 +6,7 @@
 #    By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/07 14:48:30 by dolifero          #+#    #+#              #
-#    Updated: 2024/06/03 17:05:11 by dolifero         ###   ########.fr        #
+#    Updated: 2024/06/17 15:42:50 by dolifero         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS			=	ft_isalpha.c\
 					ft_strchr.c\
 					ft_strrchr.c\
 					ft_strstr.c\
+					ft_strcmp.c\
 					ft_strncmp.c\
 					ft_memchr.c\
 					ft_memcmp.c\
@@ -89,17 +90,17 @@ MAGENTA		=	\033[0;95m
 CYAN		=	\033[2;96m
 WHITE		=	\033[0;97m
 
-all:
-				@echo "\n$(BOLD_CYAN)Starting $(BOLD_WHITE)[${NAME}] $(BOLD_CYAN)compilation..$(DEF_COLOR)\n"
-				@Make ${NAME}
-				@echo "\n$(BOLD_GREEN)${NAME} DONE!\n$(DEF_COLOR)"
-
 $(NAME):		$(OBJS)
 				@ar -crs ${NAME} ${OBJS}
 				@echo "🔗 $(CYAN) ar -crs ${NAME} ${OBJS} $(DEF_COLOR)"
 
 %.o: %.c libft.h
 	@$(CC) $(CFLAGS) -c $< -o $@ -I.
+
+all:
+				@echo "\n$(BOLD_CYAN)Starting $(BOLD_WHITE)[${NAME}] $(BOLD_CYAN)compilation..$(DEF_COLOR)\n"
+				@Make ${NAME}
+				@echo "\n$(BOLD_GREEN)${NAME} DONE!\n$(DEF_COLOR)"
 
 clean:
 				@echo "\n$(BOLD_CYAN)Cleaning $(BOLD_WHITE)[${NAME}] $(BOLD_CYAN)..$(DEF_COLOR)\n"

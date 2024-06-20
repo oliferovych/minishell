@@ -1,31 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_builtin.c                                  :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/05 14:59:59 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/17 17:04:24 by dolifero         ###   ########.fr       */
+/*   Created: 2024/06/14 17:59:39 by dolifero          #+#    #+#             */
+/*   Updated: 2024/06/14 18:32:50 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_execute_builtin(t_ast *ast, int builtin)
+void	ft_env(t_ast *ast)
 {
-	if (builtin == EXIT)
-		ft_exit(ast);
-	if (builtin == CD)
-		ch_dir(ast);
-	else if (builtin == PWD)
-		ft_pwd();
-	else if (builtin == ECHO)
-		ft_echo(ast);
-	else if (builtin == ENV)
-		ft_env(ast);
-	else if (builtin == UNSET)
-		ft_unset(ast);
-	else if (builtin == EXPORT)
-		ft_exp(ast);
+	if (ast->args[1] == NULL)
+		return (print_env(ast->ms.env));
+	else
+		ft_putendl_fd("Too many arguments.\n", STDERR_FILENO);
+	return ;
 }

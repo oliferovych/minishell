@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_builtin.c                                  :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/05 14:59:59 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/17 17:04:24 by dolifero         ###   ########.fr       */
+/*   Created: 2024/06/17 15:41:43 by dolifero          #+#    #+#             */
+/*   Updated: 2024/06/17 15:42:08 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "libft.h"
 
-void	ft_execute_builtin(t_ast *ast, int builtin)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	if (builtin == EXIT)
-		ft_exit(ast);
-	if (builtin == CD)
-		ch_dir(ast);
-	else if (builtin == PWD)
-		ft_pwd();
-	else if (builtin == ECHO)
-		ft_echo(ast);
-	else if (builtin == ENV)
-		ft_env(ast);
-	else if (builtin == UNSET)
-		ft_unset(ast);
-	else if (builtin == EXPORT)
-		ft_exp(ast);
+	while (*s1 && (*s1 == *s2))
+	{
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
 }

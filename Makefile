@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+         #
+#    By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/01 17:09:19 by dolifero          #+#    #+#              #
-#    Updated: 2024/06/11 18:12:25 by tomecker         ###   ########.fr        #
+#    Updated: 2024/06/20 14:39:11 by dolifero         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,20 +19,24 @@ LDFLAGS			= -lreadline
 LIBFT_DIR 		= Libft
 LIBFT			= $(LIBFT_DIR)/libft.a
 
-SRC_DIR     = ./src
-OBJ_DIR     = ./obj
+SRC_DIR			= ./src
+OBJ_DIR			= ./obj
 
-SUBDIRS     = parsing execution builtin_commands prompts utilities
-SRC_FILES   = $(SRC_DIR)/main.c $(foreach dir, $(SUBDIRS), $(wildcard $(SRC_DIR)/$(dir)/*.c))
+SUBDIRS			=	parsing\
+					builtin_commands\
+					environment\
+					execution\
+					parsing\
+					prompts\
+					utilities
 
-OBJ_FILES   = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
+SRC_FILES		= $(SRC_DIR)/main.c $(foreach dir, $(SUBDIRS), $(wildcard $(SRC_DIR)/$(dir)/*.c))
+OBJ_FILES		= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
-NAME        = minishell
-
-all: $(NAME)
+# all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)

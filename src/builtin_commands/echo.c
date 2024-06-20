@@ -3,34 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:53:39 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/12 21:15:44 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/20 14:40:06 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_echo(char **arguments)
+void	print_strcutoff_front(const char *str, char c)
 {
-	int i;
-	int flag;
+	int	i;
 
-	i = 1;
-	flag = 0;
-	if (ft_strnstr(arguments[i], "-n", 2) != NULL)
+	i = 0;
+	while (str[i] != '\0' && str[i] != c)
+		i++;
+	if (str[i] == c)
+		i++;
+	while (str[i] != '\0')
 	{
-		flag++;
+		ft_putchar_fd(str[i], 1);
 		i++;
 	}
-	while(arguments[i + 1])
+}
+
+void	ft_echo(t_ast *ast)
+{
+	int		i;
+	char	*var;
+
+	if (strcmp(ast->args[1], "-n") == 0)
+		i = 2;
+	else
+		i = 1;
+	while (ast->args[i] != NULL)
 	{
-		ft_printf("%s ", arguments[i]);
+		if (ast->args[i][0] == '$')
+		{
+			var = ft_strtrim(ast->args[i], "$");
+			if (variable_exists(ast->ms.env, var))
+				print_strcutoff_front(ast->ms.env[variable_exists(ast->ms.env,
+						var)], '=');
+			else
+				ft_printf("%s", ast->args[i]);
+		}
+		else
+			ft_printf("%s", ast->args[i]);
+		write(1, " ", 1);
 		i++;
 	}
-	ft_printf("%s", arguments[i]);
-	if (flag == 0)
-		ft_printf("\n");
-	
+	write(1, "\n", 1);
 }
