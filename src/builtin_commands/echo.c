@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:53:39 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/20 14:40:06 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:44:43 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,15 @@ void	ft_echo(t_ast *ast)
 {
 	int		i;
 	char	*var;
+	int		flag;
 
-	if (strcmp(ast->args[1], "-n") == 0)
-		i = 2;
-	else
-		i = 1;
+	flag = 0;
+	i = 1;
+	if (ft_strnstr(ast->args[i], "-n", 2) != NULL)
+	{
+		flag++;
+		i++;
+	}
 	while (ast->args[i] != NULL)
 	{
 		if (ast->args[i][0] == '$')
@@ -50,8 +54,10 @@ void	ft_echo(t_ast *ast)
 		}
 		else
 			ft_printf("%s", ast->args[i]);
-		write(1, " ", 1);
+		if (ast->args[i + 1] != NULL)
+			write(1, " ", 1);
 		i++;
 	}
-	write(1, "\n", 1);
+	if (flag == 0)
+		ft_printf("\n");
 }
