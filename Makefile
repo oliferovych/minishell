@@ -6,7 +6,7 @@
 #    By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/01 17:09:19 by dolifero          #+#    #+#              #
-#    Updated: 2024/06/20 14:39:11 by dolifero         ###   ########.fr        #
+#    Updated: 2024/06/20 16:15:11 by dolifero         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ SUBDIRS			=	parsing\
 SRC_FILES		= $(SRC_DIR)/main.c $(foreach dir, $(SUBDIRS), $(wildcard $(SRC_DIR)/$(dir)/*.c))
 OBJ_FILES		= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
-# all: $(NAME)
+all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
