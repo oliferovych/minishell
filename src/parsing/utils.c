@@ -168,3 +168,15 @@ int	ft_isspace(int c)
 	return (c == ' ' || c == '\f' || c == '\n' || c == '\r' || c == '\t'
 		|| c == '\v');
 }
+
+char	*strcutoff_front(const char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0' && str[i] != c)
+		i++;
+	if (str[i] == c)
+		i++;
+	return (ft_substr(str, i, ft_strlen(str) - i));
+}

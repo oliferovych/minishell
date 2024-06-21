@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/19 14:44:56 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/21 13:50:39 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void			print_ast(t_ast *node);
 void			free_ast(t_ast *node);
 int				error_indicator(int i, char *str);
 t_ast			*expr(int prec, t_token **token, t_data *data);
+char			*strcutoff_front(const char *str, char c);
 
 //EXECUTION
 void			evaluate_ast(t_ast *ast);
@@ -59,5 +60,6 @@ void			free_all(t_ast *ast, int flag);
 void			ft_error(t_ast *ast, char *str);
 int				compare_till_in_1(char *str1, char *str2, char c);
 int				compare_till(char *str1, char *str2, char c);
+int				check_filename(t_ast *ast);
 
 #endif
