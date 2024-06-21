@@ -124,6 +124,7 @@ void	free_ast(t_ast *node)
 				free(node->args[i]);
 			}
 			free(node->args);
+			free(node->tran);
 		}
 	}
 	else if (node->type == N_GREAT || node->type == N_LESS)

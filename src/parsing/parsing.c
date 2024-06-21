@@ -69,12 +69,14 @@ void	handle_parentheses(t_token **token, t_ast **node, t_data *data)
 
 void create_redir_node(t_token **token, t_ast **redir_node)
 {
+	(*redir_node)->tran = malloc(sizeof(int));
 	if ((*token)->type == T_DLESS)
 	{
 		(*token) = (*token)->next;
 		if (*token && (*token)->type == T_IDENTIFIER)
 		{
-			if ((*token)->value[0] == '$' && variable_exists((*redir_node)->ms.env, ft_strtrim((*token)->value, "$")) != -1)
+			(*redir_node)->tran[0] = (*token)->tran;
+			if ((*token)->tran == 1 && (*token)->value[0] == '$' && variable_exists((*redir_node)->ms.env, ft_strtrim((*token)->value, "$")) != -1)
 				(*redir_node)->heredoc = strcutoff_front((*redir_node)->ms.env[variable_exists((*redir_node)->ms.env, ft_strtrim((*token)->value, "$"))], '=');
 			else
 				(*redir_node)->heredoc = ft_strdup((*token)->value);
@@ -87,7 +89,8 @@ void create_redir_node(t_token **token, t_ast **redir_node)
 	else if ((*token)->next->type == T_IDENTIFIER)
 	{
 		(*token) = (*token)->next;
-		if ((*token)->value[0] == '$' && variable_exists((*redir_node)->ms.env, ft_strtrim((*token)->value, "$")) != -1)
+		(*redir_node)->tran[0] = (*token)->tran;
+		if ((*token)->tran == 1 && (*token)->value[0] == '$' && variable_exists((*redir_node)->ms.env, ft_strtrim((*token)->value, "$")) != -1)
 			(*redir_node)->filename = strcutoff_front((*redir_node)->ms.env[variable_exists((*redir_node)->ms.env, ft_strtrim((*token)->value, "$"))], '=');
 		else
 			(*redir_node)->filename = ft_strdup((*token)->value);
@@ -129,12 +132,14 @@ void create_command_node(t_token **token, t_ast **node, t_data *data)
 		}
 	}
     (*node)->args = malloc(sizeof(char *) * (arg_count + 1));
-    if (!(*node)->args)
+    (*node)->tran = malloc(sizeof(int) * (arg_count + 1));
+    if (!(*node)->args || !(*node)->tran)
         error_indicator(1, "allocating args");
     curr_token = *token;
     while (curr_token && curr_token->type == T_IDENTIFIER)
     {
-		if (curr_token->value[0] == '$' && variable_exists((*node)->ms.env, ft_strtrim(curr_token->value, "$")) != -1)
+		(*node)->tran[i] = curr_token->tran;
+		if (curr_token->tran == 1 && curr_token->value[0] == '$' && variable_exists((*node)->ms.env, ft_strtrim(curr_token->value, "$")) != -1)
 			(*node)->args[i] = strcutoff_front((*node)->ms.env[variable_exists((*node)->ms.env, ft_strtrim(curr_token->value, "$"))], '=');
 		else
 			(*node)->args[i] = ft_strdup(curr_token->value);
@@ -150,7 +155,8 @@ void create_command_node(t_token **token, t_ast **node, t_data *data)
             curr_token = curr_token->next->next;
             while (curr_token && curr_token->type == T_IDENTIFIER)
 			{
-				if (curr_token->value[0] == '$' && variable_exists((*node)->ms.env, ft_strtrim(curr_token->value, "$")) != -1)
+				(*node)->tran[i] = curr_token->tran;
+				if (curr_token->tran == 1 && curr_token->value[0] == '$' && variable_exists((*node)->ms.env, ft_strtrim(curr_token->value, "$")) != -1)
 					(*node)->args[i] = strcutoff_front((*node)->ms.env[variable_exists((*node)->ms.env, ft_strtrim(curr_token->value, "$"))], '=');
 				else
 					(*node)->args[i] = ft_strdup(curr_token->value);

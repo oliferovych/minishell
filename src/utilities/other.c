@@ -2,7 +2,7 @@
 
 int check_filename(t_ast *ast)
 {
-	if (ast->filename[0] == '$' && ast->filename[1])
+	if (ast->filename[0] == '$' && ast->filename[1] && ast->tran[0] == 1)
 		return(1);
 	return (0);
 }

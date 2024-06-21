@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-t_token	*ft_new_token(char *value, t_token_type type)
+t_token	*ft_new_token(char *value, t_token_type type, int tran)
 {
 	t_token	*new_token;
 
@@ -11,6 +11,7 @@ t_token	*ft_new_token(char *value, t_token_type type)
 	if (!new_token->value)
 		error_indicator(1, "dupe value to token");
 	new_token->type = type;
+	new_token->tran = tran;
 	return (new_token);
 }
 
@@ -36,17 +37,23 @@ int	add_token(t_token **lst, t_token_type type, char *input, int i)
 	char	*value;
 	int		count;
 	int		j;
+	int		tran;
 
 	j = i;
+	tran = 1;
 	count = 0;
 	if (type == T_OPAR || type == T_CPAR)
 		count++;
 	else if (input[i + count] == '\'' || input[i + count] == '\"')
 	{
+		if (input[i + count] == '\'')
+			tran = 0;
 		i++;
 		while (input[count + i] && input[count + i] != '\'' && input[count
 			+ i] != '\"')
 			count++;
+		if (!input[count + i])
+			error_indicator(1, "unexpected EOF while looking for matching quote");
 		j += 2;
 	}
 	else
@@ -58,7 +65,10 @@ int	add_token(t_token **lst, t_token_type type, char *input, int i)
 	value = ft_substr(input, i, count);
 	if (!value)
 		error_indicator(1, "substr");
-	new = ft_new_token(value, type);
+	if (value[ft_strlen(value) - 1] == '\"' || value[ft_strlen(value) - 1] == '\'')
+		error_indicator(1, "unexpected EOF while looking for matching quote");
+
+	new = ft_new_token(value, type, tran);
 	ft_token_list_add_back(lst, new);
 	free(value);
 	return (count + j);
