@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:09:27 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/14 18:24:39 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/21 14:02:08 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,18 @@ void	command_execute(t_ast *ast)
 	}
 }
 
-void redirect(t_ast *ast)
+int redirect(t_ast *ast)
 {
 	int fd;
 	int fd2;
 	int res;
 	char *line;
 	
+	if (ast->filename && check_filename(ast))
+	{
+		ft_printf("%s: ambiguous redirect\n", ast->filename);
+		return (1);
+	}
 	if (ast->type == N_LESS)
 	{
 		fd = open(ast->filename, O_RDONLY);
@@ -108,6 +113,7 @@ void redirect(t_ast *ast)
 	}
 	if (fd >= 0)
 		close (fd);
+	return (0);
 }
 
 int scan_for_heredoc_recursive(t_ast *ast)
@@ -229,8 +235,8 @@ void	evaluate_ast(t_ast *ast)
 		std_out = dup(STDOUT_FILENO);
 		if (std_in == -1 || std_out == -1)
 			ft_error(ast, "dup");
-		redirect(ast);
-		evaluate_ast(ast->left);
+		if (redirect(ast) == 0)
+			evaluate_ast(ast->left);
 		if (access("heredoc_buffer", F_OK) != -1)
 			unlink("heredoc_buffer");
 		dup2(std_in, STDIN_FILENO);

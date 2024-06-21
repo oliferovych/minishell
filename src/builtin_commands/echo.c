@@ -3,61 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:53:39 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/20 16:44:43 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/21 14:06:29 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	print_strcutoff_front(const char *str, char c)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0' && str[i] != c)
-		i++;
-	if (str[i] == c)
-		i++;
-	while (str[i] != '\0')
-	{
-		ft_putchar_fd(str[i], 1);
-		i++;
-	}
-}
-
 void	ft_echo(t_ast *ast)
 {
-	int		i;
-	char	*var;
-	int		flag;
-
-	flag = 0;
-	i = 1;
-	if (ft_strnstr(ast->args[i], "-n", 2) != NULL)
+	int i;
+    int flag;
+    i = 1;
+    flag = 0;
+    if (ft_strnstr(ast->args[i], "-n", 2) != NULL)
+    {
+        flag++;
+        i++;
+    }
+	if (ast->args[i][0] == '$' && ast->args[i][1] == '?')
+		ft_printf("error_code");
+	else if (!(ast->args[i][0] == '$' && ast->args[i][1]))
 	{
-		flag++;
-		i++;
-	}
-	while (ast->args[i] != NULL)
-	{
-		if (ast->args[i][0] == '$')
+		while(ast->args[i + 1])
 		{
-			var = ft_strtrim(ast->args[i], "$");
-			if (variable_exists(ast->ms.env, var))
-				print_strcutoff_front(ast->ms.env[variable_exists(ast->ms.env,
-						var)], '=');
-			else
-				ft_printf("%s", ast->args[i]);
+			ft_printf("%s ", ast->args[i]);
+			i++;
 		}
-		else
-			ft_printf("%s", ast->args[i]);
-		if (ast->args[i + 1] != NULL)
-			write(1, " ", 1);
-		i++;
+		ft_printf("%s", ast->args[i]);
 	}
-	if (flag == 0)
-		ft_printf("\n");
+    if (flag == 0)
+        ft_printf("\n");
 }
