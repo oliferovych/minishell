@@ -37,6 +37,7 @@ void			evaluate_ast(t_ast *ast);
 void			command_execute(t_ast *ast);
 int				command_is_builtin(char **args);
 void			ft_execute_builtin(t_ast *ast, int builtin);
+void			ft_execvp(t_ast *ast);
 
 //ENVIRONMENT
 char			**env_init(char **input_env);
@@ -44,6 +45,7 @@ char			**exp_init(char **environment);
 void			print_env(char **environment);
 void			ft_del_var(int i, char **env);
 void			ft_add_var(char *var, char ***env);
+void			ft_change_existing(char *var, char **env);
 int				variable_exists(char **env, char *var);
 
 //BUILTIN COMMANDS

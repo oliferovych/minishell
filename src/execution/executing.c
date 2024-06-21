@@ -26,7 +26,7 @@ void	command_execute(t_ast *ast)
 		if (pid == -1)
 			ft_error(ast, "fork");
 		if (pid == 0)
-			execvp(ast->args[0], ast->args);
+			ft_execvp(ast);
 		else
 			if (waitpid(pid, NULL, 0) == -1)
 				ft_error(ast, "waitpid");
@@ -39,7 +39,7 @@ int redirect(t_ast *ast)
 	int fd2;
 	int res;
 	char *line;
-	
+
 	if (ast->filename && check_filename(ast))
 	{
 		ft_printf("%s: ambiguous redirect\n", ast->filename);
@@ -75,7 +75,7 @@ int redirect(t_ast *ast)
 			if (line)
 				free(line);
 		}
-		
+
 		close(fd2);
 		fd = open("heredoc_buffer", O_RDONLY);
 		if (fd < 0)
@@ -120,7 +120,7 @@ int scan_for_heredoc_recursive(t_ast *ast)
 {
 	int left_result;
 	int right_result;
-	
+
     if (ast == NULL)
         return 0;
     if (ast->type == N_DLESS)
