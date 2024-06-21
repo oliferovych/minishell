@@ -35,7 +35,6 @@ void	ft_execvp(t_ast *ast)
 			ft_strlcpy(full_path, spl_path[i], strlen(spl_path[i]) + strlen(ast->args[0]) + 2);
 			ft_strlcat(full_path, "/", strlen(spl_path[i]) + strlen(ast->args[0]) + 2);
 			ft_strlcat(full_path, ast->args[0], strlen(spl_path[i]) + strlen(ast->args[0]) + 2);
-			ft_printf("%s\n", full_path);
 			if (execve(full_path, ast->args, ast->ms.env) == -1)
 			{
 				free(full_path);
