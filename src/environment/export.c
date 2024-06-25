@@ -51,7 +51,7 @@ void print_exp(char **exp)
 	while (exp[i] != NULL)
 		i++;
 	size = i;
-	array_copy = malloc(size * sizeof(char *));
+	array_copy = malloc((size + 1) * sizeof(char *));
 	if (!array_copy)
 	{
 		perror("Failed to allocate memory");
