@@ -25,7 +25,7 @@ void			free_tokens(t_token *token);
 int				ft_isspace(int c);
 
 //PARSING
-t_ast			*parse(t_token **token, char *input, char *prompt, char **env);
+t_ast			*parse(t_token **token, t_data *old_data);
 void			print_ast(t_ast *node);
 void			free_ast(t_ast *node);
 int				error_indicator(int i, char *str);
@@ -38,11 +38,13 @@ void			command_execute(t_ast *ast);
 int				command_is_builtin(char **args);
 void			ft_execute_builtin(t_ast *ast, int builtin);
 void			ft_execvp(t_ast *ast);
+void			ft_errorcode_exit(char *message, int code, t_ast *ast);
 
 //ENVIRONMENT
 char			**env_init(char **input_env);
 char			**exp_init(char **environment);
 void			print_env(char **environment);
+void			print_exp(char **exp);
 void			ft_del_var(int i, char **env);
 void			ft_add_var(char *var, char ***env);
 void			ft_change_existing(char *var, char **env);
@@ -63,5 +65,8 @@ void			ft_error(t_ast *ast, char *str);
 int				compare_till_in_1(char *str1, char *str2, char c);
 int				compare_till(char *str1, char *str2, char c);
 int				check_filename(t_ast *ast);
+char			*ft_strcutoff_front(const char *str, char c);
+void			ft_swap(char **a, char **b);
+void			bubble_sort(char **array, int size);
 
 #endif

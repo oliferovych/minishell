@@ -37,6 +37,7 @@ typedef struct s_data
 	char *prompt;
 	char *input;
 	char **env;
+	char **exp;
 	t_token *token;
 }				t_data;
 
