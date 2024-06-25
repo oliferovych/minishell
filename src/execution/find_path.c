@@ -7,12 +7,12 @@ void	ft_errorcode_exit(char *message, int code, t_ast *ast)
 
 	char_code = ft_itoa(code);
 	var = ft_strjoin("?=", char_code);
-	ft_printf("%s\n", var);
 	free(char_code);
 	if (message != NULL)
 		perror(message);
 	ft_change_existing(var, ast->ms.env);
 	free(var);
+	ft_printf("%s\n", ast->ms.env[variable_exists(ast->ms.env, "?")]);
 	exit(code);
 }
 

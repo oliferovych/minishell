@@ -17,6 +17,7 @@ t_ast	*create_ast_node(t_node_type type, t_data *data)
 		node->ms.input = data->input;
 		node->ms.prompt = data->prompt;
 		node->ms.env = data->env;
+		node->ms.exp = data->exp;
 	}
 	else
 		error_indicator(1, "create_node");
@@ -240,11 +241,11 @@ t_ast	*expr(int prec, t_token **token,  t_data *data)
 	return (left);
 }
 
-t_ast	*parse(t_token **token, char *input, char *prompt, char **env)
+t_ast	*parse(t_token **token, t_data *old_data)
 {
 	t_ast	*node;
 	t_data  *data;
-	
+
 	data = NULL;
 	node = NULL;
 	data = malloc(sizeof(t_data));
@@ -252,10 +253,11 @@ t_ast	*parse(t_token **token, char *input, char *prompt, char **env)
 		error_indicator(1, NULL);
 	else
 	{
-		data->prompt = prompt;
-		data->input = input;
+		data->prompt = old_data->prompt;
+		data->input = old_data->input;
 		data->token = *token;
-		data->env = env;
+		data->env = old_data->env;
+		data->exp = old_data->exp;
 		node = expr(3, token, data);
 	}
 	if (error_indicator(0, NULL) > 0)
