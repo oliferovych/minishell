@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/21 13:50:39 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/25 14:38:27 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void			print_env(char **environment);
 void			print_exp(char **exp);
 void			ft_del_var(int i, char **env);
 void			ft_add_var(char *var, char ***env);
+int				variable_exists2(char **env, char *var);
 void			ft_change_existing(char *var, char **env);
 int				variable_exists(char **env, char *var);
 
