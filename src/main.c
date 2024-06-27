@@ -21,33 +21,30 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_ast	*ast;
 	t_token	*token;
-	t_token	*tmp;
-	char	*input;
-	char	*prompt;
-	char	**env;
-	// char	**exp;
-	// t_data	*data;
+	// t_token	*tmp;
+	t_data	*data;
 
 	(void)argc;
 	(void)argv;
-	// data = malloc(sizeof(t_data));
-	env = env_init(envp);
-	if (!env)
+	data = malloc(sizeof(t_data));
+	data->env = env_init(envp);
+	data->exp = exp_init(data->env);
+	if (!data->env || !data->exp)
 		exit(1);
-	// exp = exp_init(env);
 	while (1)
 	{
-		prompt = get_prompt();
-		input = readline(prompt);
-		add_history(input);
-		token = get_token(input, prompt);
-		tmp = token;
-		print_token(tmp);
-		printf("\n\n");
-		ast = parse(&token, input, prompt, env);
-		print_ast(ast);
+		data->prompt = get_prompt();
+		data->input = readline(data->prompt);
+		add_history(data->input);
+		token = get_token(data->input, data->prompt);
+		// tmp = token;
+		// print_token(tmp);
+		ast = parse(&token, data);
+		// printf("\n\n");
+		// print_ast(ast);
 		evaluate_ast(ast);
-		env = ast->ms.env;
+		data->env = ast->ms.env;
+		data->exp = ast->ms.exp;
 		free_all(ast, 0);
 	}
 }

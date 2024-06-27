@@ -53,7 +53,7 @@ void	ft_exp(t_ast *ast)
 	int	i;
 
 	if (ast->args[1] == NULL)
-		return (print_env(ast->ms.env));
+		return (print_exp(ast->ms.exp));
 	else
 	{
 		i = 1;
