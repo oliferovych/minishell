@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:09:27 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/21 14:02:08 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:13:49 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ void	command_execute(t_ast *ast)
 		if (pid == -1)
 			ft_error(ast, "fork");
 		if (pid == 0)
+		{
 			execvp(ast->args[0], ast->args);
+			exit(0);
+		}
 		else
 			if (waitpid(pid, NULL, 0) == -1)
 				ft_error(ast, "waitpid");

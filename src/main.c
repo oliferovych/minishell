@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/21 17:06:38 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/25 13:55:31 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_ast	*ast;
 	t_token	*token;
-	// t_token	*tmp;
+	t_token	*tmp;
 	char	*input;
 	char	*prompt;
 	char	**env;
@@ -41,11 +41,11 @@ int	main(int argc, char **argv, char **envp)
 		input = readline(prompt);
 		add_history(input);
 		token = get_token(input, prompt);
-		// tmp = token;
-		// print_token(tmp);
+		tmp = token;
+		print_token(tmp);
+		printf("\n\n");
 		ast = parse(&token, input, prompt, env);
-		// printf("\n\n");
-		// print_ast(ast);
+		print_ast(ast);
 		evaluate_ast(ast);
 		env = ast->ms.env;
 		free_all(ast, 0);

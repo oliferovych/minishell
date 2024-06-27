@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:53:39 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/21 17:23:08 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:58:20 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,14 @@ void	ft_echo(t_ast *ast)
     }
 	if (ast->args[i][0] == '$' && ast->args[i][1] == '?')
 		ft_printf("error_code");
-	else if (!(ast->args[i][0] == '$' && ast->args[i][1]) || ast->tran[i] == 0)
+	else
 	{
 		while(ast->args[i])
 		{
-			if (!(ast->args[i][0] == '$' && ast->args[i][1]) || ast->tran[i] == 0)
+			// printf("\n%i\n", ast->tran[i][0]);
+			if (!(ast->args[i][0] == '$' && ast->args[i][1]) || ast->tran[i][0] == 0)
 				ft_printf("%s", ast->args[i]);
-			if (ast->args[i + 1] && (!(ast->args[i + 1][0] == '$' && ast->args[i + 1][1]) || ast->tran[i + 1] == 0))
+			if (ast->args[i + 1])
 				ft_printf(" ");
 			i++;
 		}

@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 15:08:37 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/21 17:16:51 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:47:33 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef struct s_token
 	char			*value;
 	struct s_token	*next;
 	struct s_token	*prev;
-	int				tran;
 }					t_token;
 
 typedef struct s_shell
@@ -51,7 +50,7 @@ typedef struct s_ast
 	struct s_ast	*left;
 	struct s_ast	*right;
 	struct s_shell	ms;
-	int				*tran;
+	int				**tran;
 }					t_ast;
 
 #endif
