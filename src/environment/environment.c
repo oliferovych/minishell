@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 16:59:42 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/17 16:57:04 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/06/25 14:37:12 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,24 @@ void	ft_del_var(int i, char **env)
 		i++;
 	}
 	ft_printf("deleted\n");
+}
+
+int	variable_exists2(char **env, char *var)
+{
+	int	i;
+
+	i = 0;
+	while (env[i] != NULL)
+	{
+		if (compare_till(env[i], var, '=') == 0)
+		{
+			free(var);
+			return (i);
+		}
+		i++;
+	}
+	free(var);
+	return (-1);
 }
 
 int	variable_exists(char **env, char *var)

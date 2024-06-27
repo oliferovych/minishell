@@ -30,38 +30,88 @@ void	ft_token_list_add_back(t_token **lst, t_token *new_token)
 	new_token->prev = curr_node;
 }
 
+char *remove_char(const char *str, char char_to_remove)
+{
+    int new_len;
+    int i;
+	int j;
+	char *new_str;
+
+	i = 0;
+	new_len = 0;
+    while (str[i] != '\0')
+    {
+        if (str[i] != char_to_remove)
+            new_len++;
+        i++;
+    }
+	new_str = (char *)malloc(new_len + 1);
+    if (!new_str)
+        return NULL;
+    i = 0;
+    j = 0;
+    while (str[i] != '\0')
+    {
+        if (str[i] != char_to_remove)
+        {
+            new_str[j] = str[i];
+            j++;
+        }
+        i++;
+    }
+    new_str[j] = '\0';
+    return new_str;
+}
+
+char *process_value(char *input, int *i, int *count)
+{
+    char *value;
+    int	j;
+	int single;
+	int doublee;
+	
+	doublee = 0;
+	single = 0;
+	j = *i;
+	while (input[*count + j] && !ft_isspace(input[*count + j]) && input[j + *count] != ')')
+	{
+		if (input[j + *count] == '\'')
+			single++;
+		else if (input[j + *count] == '\"')
+			doublee++;
+		(*count)++;
+	}
+	*i = j + *count;
+    value = ft_substr(input, j, *count);
+    if (!value)
+        error_indicator(1, "substr");
+	if (doublee % 2 != 0 || single % 2 != 0)
+        error_indicator(1, "unexpected EOF while looking for matching quote");
+    return (value);
+}
+
 int	add_token(t_token **lst, t_token_type type, char *input, int i)
 {
 	t_token	*new;
 	char	*value;
 	int		count;
-	int		j;
 
-	j = i;
 	count = 0;
 	if (type == T_OPAR || type == T_CPAR)
-		count++;
-	else if (input[i + count] == '\'' || input[i + count] == '\"')
 	{
-		i++;
-		while (input[count + i] && input[count + i] != '\'' && input[count
-			+ i] != '\"')
-			count++;
-		j += 2;
+		count++;
+		value = ft_substr(input, i, count);
 	}
 	else
 	{
-		while (input[count + j] && !ft_isspace(input[count + j]) && input[j
-			+ count] != ')')
-			count++;
+		value = process_value(input, &i, &count);
+		value = remove_char(value, '\"');
 	}
-	value = ft_substr(input, i, count);
-	if (!value)
-		error_indicator(1, "substr");
+
 	new = ft_new_token(value, type);
 	ft_token_list_add_back(lst, new);
 	free(value);
-	return (count + j);
+	return (i);
 }
 
 t_token	*get_token(char *input, char *prompt)

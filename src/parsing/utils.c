@@ -122,8 +122,11 @@ void	free_ast(t_ast *node)
 			for (int i = 0; node->args[i]; i++)
 			{
 				free(node->args[i]);
+				if (node->tran[i])
+					free(node->tran[i]);
 			}
 			free(node->args);
+			free(node->tran);
 		}
 	}
 	else if (node->type == N_GREAT || node->type == N_LESS)

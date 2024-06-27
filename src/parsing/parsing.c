@@ -67,19 +67,86 @@ void	handle_parentheses(t_token **token, t_ast **node, t_data *data)
 		error_indicator(1, "parenthesis do not close");
 }
 
+char *ft_str_join_free(char *s1, char *s2)
+{
+	char *tmp;
+
+	if (!s1 || !s2)
+		error_indicator(1, "parsing args");
+	tmp = s1;
+	s1 = ft_strjoin(tmp, s2);
+	if (!s1)
+		error_indicator(1, "parsing args");
+	free(s2);
+	free(tmp);
+	return (s1);
+}
+
+char *transform_var(t_ast **node, t_token *token, int k)
+{
+	int i;
+	int j;
+	char *str;
+	char *res;
+	char *tmp;
+
+	i = 0;
+	res = ft_strdup("");
+	if (!res)
+        error_indicator(1, "parsing args");
+	(*node)->tran[k] = malloc(sizeof(int));
+	if (!(*node)->tran[k])
+		error_indicator(1, "allocating inner tran");
+	(*node)->tran[k][0] = 1;
+	str = token->value;
+	while(str[i])
+	{
+		j = i;
+		while (str[i] && str[i] != '$' && str[i] != '\'')
+			i++;
+		tmp = ft_substr(str, j, i - j);
+		res = ft_str_join_free(res, tmp);
+		if (str[i] == '\'')
+		{
+			i++;
+			j = i;
+			while(str[i] && str[i] != '\'')
+				i++;
+			tmp = ft_substr(str, j, i - j);
+			res = ft_str_join_free(res, tmp);
+			if (str[i])
+				i++;
+			(*node)->tran[k][0] = 0;
+		}
+		if (str[i] == '$')
+		{
+			i++;
+			j = i;
+			while(str[i] && isalnum(str[i]))
+				i++;
+			if (variable_exists2((*node)->ms.env, ft_substr(str, j, i - j)) != -1)
+				tmp = strcutoff_front((*node)->ms.env[variable_exists2((*node)->ms.env, ft_substr(str, j, i - j))], '=');
+			else
+				tmp = ft_substr(str, j - 1, i - (j - 1));
+			res = ft_str_join_free(res, tmp);
+		}
+	}
+	return (res);
+}
+
 void create_redir_node(t_token **token, t_ast **redir_node)
 {
+	(*redir_node)->tran = malloc(sizeof(int *));
 	if ((*token)->type == T_DLESS)
 	{
 		(*token) = (*token)->next;
 		if (*token && (*token)->type == T_IDENTIFIER)
 		{
-			if ((*token)->value[0] == '$' && variable_exists((*redir_node)->ms.env, ft_strtrim((*token)->value, "$")) != -1)
-				(*redir_node)->heredoc = strcutoff_front((*redir_node)->ms.env[variable_exists((*redir_node)->ms.env, ft_strtrim((*token)->value, "$"))], '=');
-			else
-				(*redir_node)->heredoc = ft_strdup((*token)->value);
+			// if (ft_strchr(curr_token->value, '*') != NULL)
+			// 	(*node)->args[i] = handle_wildcards(curr_token);
+			(*redir_node)->heredoc = transform_var(redir_node, (*token), 0);
 			if (!(*redir_node)->heredoc)
-				error_indicator(1, "failed duplicating heredoc");
+				error_indicator(1, "duplicating heredoc");
 		}
 		else
 			error_indicator(1, "missing heredoc delimiter after << operator");
@@ -87,12 +154,11 @@ void create_redir_node(t_token **token, t_ast **redir_node)
 	else if ((*token)->next->type == T_IDENTIFIER)
 	{
 		(*token) = (*token)->next;
-		if ((*token)->value[0] == '$' && variable_exists((*redir_node)->ms.env, ft_strtrim((*token)->value, "$")) != -1)
-			(*redir_node)->filename = strcutoff_front((*redir_node)->ms.env[variable_exists((*redir_node)->ms.env, ft_strtrim((*token)->value, "$"))], '=');
-		else
-			(*redir_node)->filename = ft_strdup((*token)->value);
+		// if (ft_strchr(curr_token->value, '*') != NULL)
+		// 	(*node)->args[i] = handle_wildcards(curr_token);
+		(*redir_node)->filename = transform_var(redir_node, (*token), 0);
 		if (!(*redir_node)->filename)
-			error_indicator(1, "failed duplicating filename");
+			error_indicator(1, "duplicating filename");
 	}
 	else
 		error_indicator(1, "Missing file for redirection");
@@ -114,7 +180,7 @@ void create_command_node(t_token **token, t_ast **node, t_data *data)
     (*node) = create_ast_node(N_COMMAND, data);
     while (curr_token && curr_token->type == T_IDENTIFIER)
     {
-        arg_count++;
+		arg_count++;
         curr_token = curr_token->next;
     }
     after_token = curr_token;
@@ -129,15 +195,15 @@ void create_command_node(t_token **token, t_ast **node, t_data *data)
 		}
 	}
     (*node)->args = malloc(sizeof(char *) * (arg_count + 1));
-    if (!(*node)->args)
+    (*node)->tran = malloc(sizeof(int *) * arg_count);
+    if (!(*node)->args || !(*node)->tran)
         error_indicator(1, "allocating args");
     curr_token = *token;
     while (curr_token && curr_token->type == T_IDENTIFIER)
     {
-		if (curr_token->value[0] == '$' && variable_exists((*node)->ms.env, ft_strtrim(curr_token->value, "$")) != -1)
-			(*node)->args[i] = strcutoff_front((*node)->ms.env[variable_exists((*node)->ms.env, ft_strtrim(curr_token->value, "$"))], '=');
-		else
-			(*node)->args[i] = ft_strdup(curr_token->value);
+		// if (ft_strchr(curr_token->value, '*') != NULL)
+		// 	(*node)->args[i] = handle_wildcards(curr_token);
+		(*node)->args[i] = transform_var(node, curr_token, i);
 		if (!(*node)->args[i])
 			error_indicator(1, "duplicating args");
         curr_token = curr_token->next;
@@ -150,10 +216,9 @@ void create_command_node(t_token **token, t_ast **node, t_data *data)
             curr_token = curr_token->next->next;
             while (curr_token && curr_token->type == T_IDENTIFIER)
 			{
-				if (curr_token->value[0] == '$' && variable_exists((*node)->ms.env, ft_strtrim(curr_token->value, "$")) != -1)
-					(*node)->args[i] = strcutoff_front((*node)->ms.env[variable_exists((*node)->ms.env, ft_strtrim(curr_token->value, "$"))], '=');
-				else
-					(*node)->args[i] = ft_strdup(curr_token->value);
+				// if (ft_strchr(curr_token->value, '*') != NULL)
+				// 	(*node)->args[i] = handle_wildcards(curr_token);
+				(*node)->args[i] = transform_var(node, curr_token, i);
 				if (!(*node)->args[i])
 					error_indicator(1, "duplicating args");
 				curr_token = curr_token->next;
