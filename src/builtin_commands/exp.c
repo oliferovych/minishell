@@ -50,7 +50,8 @@ void	ft_change_existing(char *var, char **env)
 
 void	ft_exp(t_ast *ast)
 {
-	int	i;
+	int		i;
+	char	*exp;
 
 	if (ast->args[1] == NULL)
 		return (print_exp(ast->ms.exp));
@@ -66,6 +67,12 @@ void	ft_exp(t_ast *ast)
 				else
 					ft_change_existing(ast->args[i], ast->ms.env);
 			}
+			exp = export_line(ast->args[i]);
+			if (variable_exists(ast->ms.exp, exp) == -1)
+				ft_add_var(exp, &ast->ms.exp);
+			else
+				ft_change_existing(exp, ast->ms.exp);
+			free(exp);
 			i++;
 		}
 	}
