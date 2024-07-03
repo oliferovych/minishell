@@ -30,55 +30,30 @@ void	ft_token_list_add_back(t_token **lst, t_token *new_token)
 	new_token->prev = curr_node;
 }
 
-char *remove_char(const char *str, char char_to_remove)
-{
-    int new_len;
-    int i;
-	int j;
-	char *new_str;
-
-	i = 0;
-	new_len = 0;
-    while (str[i] != '\0')
-    {
-        if (str[i] != char_to_remove)
-            new_len++;
-        i++;
-    }
-	new_str = (char *)malloc(new_len + 1);
-    if (!new_str)
-        return NULL;
-    i = 0;
-    j = 0;
-    while (str[i] != '\0')
-    {
-        if (str[i] != char_to_remove)
-        {
-            new_str[j] = str[i];
-            j++;
-        }
-        i++;
-    }
-    new_str[j] = '\0';
-    return new_str;
-}
-
 char *process_value(char *input, int *i, int *count)
 {
     char *value;
     int	j;
 	int single;
 	int doublee;
+	int quote;
 	
+	quote = 0;
 	doublee = 0;
 	single = 0;
 	j = *i;
-	while (input[*count + j] && !ft_isspace(input[*count + j]) && input[j + *count] != ')')
+	while (input[*count + j] && (!ft_isspace(input[*count + j]) || quote == 1) && input[j + *count] != ')')
 	{
 		if (input[j + *count] == '\'')
+		{
 			single++;
+			quote++;
+		}
 		else if (input[j + *count] == '\"')
+		{
 			doublee++;
+			quote++;
+		}
 		(*count)++;
 	}
 	*i = j + *count;
