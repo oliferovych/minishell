@@ -50,6 +50,7 @@ void			ft_add_var(char *var, char ***env);
 int				variable_exists2(char **env, char *var);
 void			ft_change_existing(char *var, char **env);
 int				variable_exists(char **env, char *var);
+char			*export_line(char *env_line);
 
 //BUILTIN COMMANDS
 void			ch_dir(t_ast *ast);

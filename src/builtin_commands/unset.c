@@ -56,8 +56,9 @@ int	compare_till(char *str1, char *str2, char c)
 
 void	ft_unset(t_ast *ast)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*exp_var;
 
 	j = 1;
 	while (ast->args[j] != NULL)
@@ -67,6 +68,15 @@ void	ft_unset(t_ast *ast)
 		{
 			if (compare_till_in_1(ast->ms.env[i], ast->args[j], '=') == 0)
 				ft_del_var(i, ast->ms.env);
+			i++;
+		}
+		i = 0;
+		while (ast->ms.exp[i] != NULL)
+		{
+			exp_var = ft_strjoin("declare -x ", ast->args[j]);
+			if (compare_till_in_1(ast->ms.exp[i], exp_var, '=') == 0)
+				ft_del_var(i, ast->ms.exp);
+			free(exp_var);
 			i++;
 		}
 		j++;

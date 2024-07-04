@@ -57,12 +57,12 @@ char *process_value(char *input, int *i, int *count)
 		(*count)++;
 	}
 	*i = j + *count;
-    value = ft_substr(input, j, *count);
-    if (!value)
-        error_indicator(1, "substr");
+	value = ft_substr(input, j, *count);
+	if (!value)
+		error_indicator(1, "substr");
 	if (doublee % 2 != 0 || single % 2 != 0)
-        error_indicator(1, "unexpected EOF while looking for matching quote");
-    return (value);
+		error_indicator(1, "unexpected EOF while looking for matching quote");
+	return (value);
 }
 
 int	add_token(t_token **lst, t_token_type type, char *input, int i)
