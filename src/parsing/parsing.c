@@ -102,11 +102,6 @@ char *transform_var(t_ast **node, t_token *token, int k)
 	str = token->value;
 	while(str[i])
 	{
-		j = i;
-		while (str[i] && str[i] != '$' && str[i] != '\'')
-			i++;
-		tmp = ft_substr(str, j, i - j);
-		res = ft_str_join_free(res, tmp);
 		if (str[i] == '\'')
 		{
 			i++;
@@ -118,6 +113,11 @@ char *transform_var(t_ast **node, t_token *token, int k)
 			if (str[i])
 				i++;
 			(*node)->tran[k][0] = 0;
+		}
+		if (ft_strchr(str, '*') != NULL)
+		{
+			handle_wildcards(str, &res);
+			return (res);
 		}
 		if (str[i] == '$')
 		{
@@ -131,6 +131,11 @@ char *transform_var(t_ast **node, t_token *token, int k)
 				tmp = ft_substr(str, j - 1, i - (j - 1));
 			res = ft_str_join_free(res, tmp);
 		}
+		j = i;
+		while (str[i] && str[i] != '$' && str[i] != '\'')
+			i++;
+		tmp = ft_substr(str, j, i - j);
+		res = ft_str_join_free(res, tmp);
 	}
 	return (res);
 }
@@ -202,8 +207,6 @@ void create_command_node(t_token **token, t_ast **node, t_data *data)
     curr_token = *token;
     while (curr_token && curr_token->type == T_IDENTIFIER)
     {
-		// if (ft_strchr(curr_token->value, '*') != NULL)
-		// 	(*node)->args[i] = handle_wildcards(curr_token);
 		(*node)->args[i] = transform_var(node, curr_token, i);
 		if (!(*node)->args[i])
 			error_indicator(1, "duplicating args");
