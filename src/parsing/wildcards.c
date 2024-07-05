@@ -1,114 +1,126 @@
 #include "../../includes/minishell.h"
 #include <dirent.h>
 
-static int match_segments(const char *str, char **segments)
+void	free_double_array_char(char **array)
 {
-    const char *s = str;
-    int i = 0;
+	int	i;
 
-    while (segments[i] != NULL)
-	{
-        s = strstr(s, segments[i]);
-        if (!s) return 0;
-        s += strlen(segments[i]);
-        i++;
-    }
-    return 1;
-}
-
-void free_double_array_char(char **array)
-{
-	int i;
-	
 	i = 0;
 	while (array[i])
 		free(array[i++]);
 	free(array);
 }
 
-char **ft_split_inc_char(char *str, char c)
+char	**custom_realloc(char **ptr, size_t old_size, size_t new_size)
 {
-	char **res;
-	int i;
-	int j;
+	char	**new_ptr;
 
-	i = 0;
-	j = 0;
-	while(str[i])
+	if (ptr == NULL)
 	{
-		
+		new_ptr = malloc(new_size * sizeof(char *));
+		if (!new_ptr)
+			return (NULL);
+		return (new_ptr);
 	}
+	if (new_size <= old_size)
+		return (ptr);
+	new_ptr = malloc(new_size * sizeof(char *));
+	if (!new_ptr)
+	{
+		free_double_array_char(ptr);
+		return (NULL);
+	}
+	ft_memcpy(new_ptr, ptr, old_size * sizeof(char *));
+	free(ptr);
+	return (new_ptr);
 }
 
-char **search_with_wildcards(char *str)
+int	match_pattern(const char *pattern, const char *str)
 {
-	char **res;
-    DIR *dir;
-    struct dirent *entry;
-    char **segments;
-	int k;
+	if (str[0] == '.')
+		return (0);
+	if (*pattern == '\0' && *str == '\0')
+		return (1);
+	if (*pattern == '*' && *(pattern + 1) == '\0')
+		return (1);
+	if (*pattern == '*' && *(pattern + 1) != '\0')
+	{
+		while (*str)
+		{
+			if (match_pattern(pattern + 1, str))
+				return (1);
+			str++;
+		}
+		return (0);
+	}
+	if (*pattern == *str)
+		return (match_pattern(pattern + 1, str + 1));
+	return (0);
+}
+
+char	**search_with_wildcards(char *str)
+{
+	char			**res;
+	DIR				*dir;
+	struct dirent	*entry;
+	int				k;
 
 	res = NULL;
-    segments = ft_split_inc_char(str, '*');
-    if (!segments)
+	dir = opendir(".");
+	if (!dir)
 		return (NULL);
-    dir = opendir(".");
-    if (!dir)
-	{
-        free_double_array_char(segments);
-        return (NULL);
-    }
 	k = 0;
-    while ((entry = readdir(dir)) != NULL)
+	entry = readdir(dir);
+	while (entry != NULL)
 	{
-        if (match_segments(entry->d_name, segments))
+		if (match_pattern(str, entry->d_name))
 		{
-			res = realloc(res, (k + 1) * sizeof(char *));
-			res[k] = ft_strdup(entry->d_name);
-			k++;
-        }
-    }
-	res = realloc(res, (k + 1) * sizeof(char *));
+			res = custom_realloc(res, k, (k + 1) * sizeof(char *));
+			res[k++] = ft_strdup(entry->d_name);
+		}
+		entry = readdir(dir);
+	}
+	res = custom_realloc(res, k, (k + 1) * sizeof(char *));
 	res[k] = NULL;
-    closedir(dir);
-    free_double_array_char(segments);
-	return(res);
+	if (k > 0)
+		bubble_sort(res, k);
+	return (closedir(dir), res);
 }
 
-char *join_together(char **array)
+char	*join_together(char **array)
 {
-    char *res;
-    int i;
-	char *tmp;
+	char	*res;
+	int		i;
+	char	*tmp;
 
 	res = ft_strdup("");
 	if (!res)
-        return NULL;
-  	i = 0;
-    while (array[i])
+		return (NULL);
+	i = 0;
+	while (array[i])
 	{
-        if (i != 0)
+		if (i != 0)
 		{
-            tmp = res;
-            res = ft_strjoin(tmp, " ");
-            free(tmp);
-            if (!res)
-                return NULL;
-        }
-        res = ft_str_join_free(res, array[i]);
+			tmp = res;
+			res = ft_strjoin(tmp, " ");
+			free(tmp);
+			if (!res)
+				return (NULL);
+		}
+		res = ft_str_join_free(res, array[i]);
 		if (!res)
-			return NULL;
-        i++;
-    }
+			return (NULL);
+		i++;
+	}
 	res = remove_char(res, '*');
-    return (res);
+	return (free(array), res);
 }
 
-void handle_wildcards(char *str, char **res)
+void	handle_wildcards(char *str, char **res)
 {
-	char **array;
-	
-    array = search_with_wildcards(str);
+	char	**array;
+
+	array = search_with_wildcards(str);
 	if (!array)
 		error_indicator(1, "wildcard parsing failed");
 	*res = join_together(array);
