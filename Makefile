@@ -28,6 +28,7 @@ SUBDIRS			=	parsing\
 					execution\
 					parsing\
 					prompts\
+					signals\
 					utilities
 
 SRC_FILES		= $(SRC_DIR)/main.c $(foreach dir, $(SUBDIRS), $(wildcard $(SRC_DIR)/$(dir)/*.c))
