@@ -3,7 +3,11 @@
 void	ft_errorcode_exit(char *command, int code)
 {
 	if (command != NULL)
-		perror(command);
+	{
+		ft_putstr_fd(command, 2);
+		if (code == 127)
+			ft_putstr_fd(": command not found\n", 2);
+	}
 	ft_get_ast()->ms.exit_code = code;
 	exit(code);
 }
@@ -33,13 +37,13 @@ void	case_split_path(char *path, t_ast *ast)
 	i = 0;
 	while (spl_path[i] != NULL)
 	{
-		full_path = malloc(strlen(spl_path[i]) + strlen(ast->args[0]) + 2);
+		full_path = malloc(ft_strlen(spl_path[i]) + ft_strlen(ast->args[0]) + 2);
 		ft_strlcpy(full_path, spl_path[i],
-			strlen(spl_path[i]) + strlen(ast->args[0]) + 2);
+			ft_strlen(spl_path[i]) + ft_strlen(ast->args[0]) + 2);
 		ft_strlcat(full_path, "/",
-			strlen(spl_path[i]) + strlen(ast->args[0]) + 2);
+			ft_strlen(spl_path[i]) + ft_strlen(ast->args[0]) + 2);
 		ft_strlcat(full_path, ast->args[0],
-			strlen(spl_path[i]) + strlen(ast->args[0]) + 2);
+			ft_strlen(spl_path[i]) + ft_strlen(ast->args[0]) + 2);
 		if (execve(full_path, ast->args, ast->ms.env) == -1)
 		{
 			free(full_path);

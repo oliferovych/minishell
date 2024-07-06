@@ -33,8 +33,8 @@ static t_data	*data_init(char **envp)
 	data->exp = exp_init(data->env);
 	if (!data->exp)
 	{
-		free(data);
 		free_environment(data->env);
+		free(data);
 		exit(EXIT_FAILURE);
 	}
 	return (data);
@@ -47,10 +47,16 @@ static void	get_input(t_data *data, t_ast *ast)
 	if (!data->input)
 	{
 		ft_printf("%sexit\n", data->prompt);
-		free(data->input);
-		free(data->prompt);
-		free(data);
-		free_all(ast, 1);
+		if (ast != NULL)
+			free_all(ast, 1);
+		else
+		{
+			free(data->prompt);
+			free(data->input);
+			free_environment(data->env);
+			free_environment(data->exp);
+			free(data);
+		}
 		exit(0);
 	}
 	add_history(data->input);
@@ -60,7 +66,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_ast	*ast;
 	t_token	*token;
-	t_token	*tmp;
+	// t_token	*tmp;
 	t_data	*data;
 
 	(void)argc;
@@ -73,11 +79,11 @@ int	main(int argc, char **argv, char **envp)
 	{
 		get_input(data, ast);
 		token = get_token(data->input, data->prompt);
-		tmp = token;
-		print_token(tmp);
+		// tmp = token;
+		// print_token(tmp);
 		ast = parse(&token, data);
-		printf("\n\n");
-		print_ast(ast);
+		// printf("\n\n");
+		// print_ast(ast);
 		evaluate_ast(ast);
 		data->env = ast->ms.env;
 		data->exp = ast->ms.exp;
