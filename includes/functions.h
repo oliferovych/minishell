@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/25 14:38:27 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/06/28 16:50:26 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,10 @@ char			*ft_strcutoff_front(const char *str, char c);
 void			ft_swap(char **a, char **b);
 void			bubble_sort(char **array, int size);
 t_ast			*ft_get_ast(void);
+char			*remove_char(const char *str, char char_to_remove);
+
+//WILDCARDS
+void			handle_wildcards(char *str, char **res);
+char			*ft_str_join_free(char *s1, char *s2);
 
 #endif
