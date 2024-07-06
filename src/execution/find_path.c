@@ -1,18 +1,10 @@
 #include "../../includes/minishell.h"
 
-void	ft_errorcode_exit(char *message, int code, t_ast *ast)
+void	ft_errorcode_exit(char *command, int code)
 {
-	char	*var;
-	char	*char_code;
-
-	char_code = ft_itoa(code);
-	var = ft_strjoin("?=", char_code);
-	free(char_code);
-	if (message != NULL)
-		perror(message);
-	ft_change_existing(var, ast->ms.env);
-	free(var);
-	ft_printf("%s\n", ast->ms.env[variable_exists(ast->ms.env, "?")]);
+	if (command != NULL)
+		perror(command);
+	ft_get_ast()->ms.exit_code = code;
 	exit(code);
 }
 
@@ -52,7 +44,7 @@ void	case_split_path(char *path, t_ast *ast)
 		{
 			free(full_path);
 			if (spl_path[i + 1] == NULL)
-				ft_errorcode_exit(ast->args[0], 127, ast);
+				ft_errorcode_exit(ast->args[0], 127);
 		}
 		i++;
 	}
@@ -70,8 +62,8 @@ void	ft_execvp(t_ast *ast)
 		if (execve(path, ast->args, ast->ms.env) == -1)
 		{
 			free(path);
-			ft_errorcode_exit(ast->args[0], 127, ast);
+			ft_errorcode_exit(ast->args[0], 127);
 		}
 	}
-	ft_errorcode_exit(NULL, 0, ast);
+	ft_errorcode_exit(NULL, 0);
 }
