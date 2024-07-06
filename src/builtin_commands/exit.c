@@ -14,24 +14,26 @@
 
 void	ft_exit(t_ast *ast)
 {
-	int	exit_code;
-
-	exit_code = 0;
 	if (ast->args[1] != NULL)
 	{
-		if (ast->args[2] != NULL && !ft_atoi(ast->args[1]))
-			return ((void)ft_putendl_fd("exit: numeric argument required",
-					STDERR_FILENO));
-		else if (!atoi(ast->args[1]))
-			exit_code = 255;
-		else
-			exit_code = ft_atoi(ast->args[1]);
-		free_all(ast, 1);
-		exit(exit_code);
+		if (!ft_atoi(ast->args[1]) || ft_strlen(ast->args[1]) == 0)
+		{
+			ft_putendl_fd("exit", 2);
+			ft_putendl_fd("minishell: exit: numeric argument required", 2);
+			free_all(ast, 1);
+			exit(255);
+		}
+		if (ast->args[2])
+		{
+			ft_putendl_fd("exit", 2);
+			ft_putendl_fd("minishell: exit: too many arguments", 2);
+			ast->ms.exit_code = 1;
+			return ;
+		}
+		ast->ms.exit_code = ft_atoi(ast->args[1]);
+		ast->ms.exit_code = ast->ms.exit_code % 256;
 	}
-	else
-	{
-		free_all(ast, 1);
-		exit(exit_code);
-	}
+	ft_putendl_fd("exit", 2);
+	free_all(ast, 1);
+	exit(ast->ms.exit_code);
 }
