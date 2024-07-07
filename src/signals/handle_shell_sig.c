@@ -1,45 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   freeing.c                                          :+:      :+:    :+:   */
+/*   handle_shell_sig.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 17:08:26 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/27 16:24:32 by dolifero         ###   ########.fr       */
+/*   Created: 2024/07/05 00:56:57 by dolifero          #+#    #+#             */
+/*   Updated: 2024/07/05 01:27:26 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	free_environment(char **environment)
+void	shell_handler_sigint(int signum)
 {
-	int	i;
-
-	i = 0;
-	while (environment[i] != NULL)
-	{
-		free(environment[i]);
-		i++;
-	}
-	free(environment);
-}
-
-
-void	free_all(t_ast *ast, int flag)
-{
-	if (ast)
-	{
-		if (flag)
-		{
-			free_environment(ast->ms.env);
-			free_environment(ast->ms.exp);
-		}
-		if (ast->ms.input)
-			free(ast->ms.input);
-		if (ast->ms.prompt)
-			free(ast->ms.prompt);
-		free_tokens(ast->ms.token);
-		free_ast(ast);
-	}
+	(void)signum;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
