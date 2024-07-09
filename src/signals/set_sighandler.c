@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 22:12:52 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/04 22:12:52 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/09 17:21:41 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_sigmode_shell(void)
 
 void	ft_sigmode_heredoc(void)
 {
-	set_sighandler(SIGINT, shell_handler_sigint);
+	set_sighandler(SIGINT, heredoc_handler_sigint);
 	set_sighandler(SIGQUIT, SIG_IGN);
 }
 
