@@ -27,15 +27,20 @@ void	free_environment(char **environment)
 
 void	free_all(t_ast *ast, int flag)
 {
-	if (flag)
+	if (ast)
 	{
-		free_environment(ast->ms.env);
-		free_environment(ast->ms.exp);
+		if (flag)
+		{
+			free_environment(ast->ms.env);
+			free_environment(ast->ms.exp);
+		}
+		if (ast->ms.input)
+			free(ast->ms.input);
+		if (ast->ms.prompt)
+			free(ast->ms.prompt);
+		free_tokens(ast->ms.token);
+		free_ast(ast);
 	}
-	free(ast->ms.input);
-	free(ast->ms.prompt);
-	free_tokens(ast->ms.token);
-	free_ast(ast);
 }
 
 void	free_command(t_ast *node, int i)

@@ -49,7 +49,7 @@ void			command_execute(t_ast *ast);
 int				command_is_builtin(char **args);
 void			ft_execute_builtin(t_ast *ast, int builtin);
 void			ft_execvp(t_ast *ast);
-void			ft_errorcode_exit(char *message, int code, t_ast *ast);
+void			ft_errorcode_exit(char *command, int code);
 
 //ENVIRONMENT
 char			**env_init(char **input_env);
@@ -72,8 +72,16 @@ void			ft_env(t_ast *ast);
 void			ft_unset(t_ast *ast);
 void			ft_exp(t_ast *ast);
 
+//SIGNALS
+void			shell_handler_sigint(int signum);
+void			heredoc_handler_sigint(int signum);
+void			ft_sigmode_shell(void);
+void			ft_sigmode_heredoc(void);
+void			ft_initialize_signals(void);
+
 //UTILITIES
 void			free_all(t_ast *ast, int flag);
+void			free_environment(char **environment);
 void			ft_error(t_ast *ast, char *str);
 int				compare_till_in_1(char *str1, char *str2, char c);
 int				compare_till(char *str1, char *str2, char c);
@@ -81,11 +89,12 @@ int				check_filename(t_ast *ast);
 char			*ft_strcutoff_front(const char *str, char c);
 void			ft_swap(char **a, char **b);
 void			bubble_sort(char **array, int size);
+t_ast			*ft_get_ast(void);
 char			*remove_char(const char *str, char char_to_remove);
 void			free_double_array_char(char **array);
 
+//WILDCARDS
 char			*handle_wildcards(char *str);
 char			*ft_str_join_free(char *s1, char *s2);
-
 
 #endif

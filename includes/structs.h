@@ -30,6 +30,7 @@ typedef struct s_shell
 	t_token			*token;
 	char			**env;
 	char			**exp;
+	int				exit_code;
 }					t_shell;
 
 typedef struct s_data

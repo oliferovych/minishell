@@ -81,7 +81,6 @@ char	**env_init(char **input_env)
 		i++;
 	}
 	environment[i] = NULL;
-	ft_add_var("?=0", &environment);
 	return (environment);
 }
 

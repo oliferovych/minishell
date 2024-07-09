@@ -23,13 +23,12 @@ void	ft_echo(t_ast *ast)
         flag++;
         i++;
     }
-	if (ast->args[i][0] == '$' && ast->args[i][1] == '?')
-		ft_printf("error_code");
 	else
 	{
 		while(ast->args[i])
 		{
-			// printf("\n%i\n", ast->tran[i][0]);
+			if (ast->args[i][0] == '$' && ast->args[i][1] == '?')
+				ft_printf("%d", ast->ms.exit_code);
 			if (!(ast->args[i][0] == '$' && ast->args[i][1]) || ast->tran[i][0] == 0)
 				ft_printf("%s", ast->args[i]);
 			if (ast->args[i + 1])
