@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:14 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 11:07:15 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/09 14:59:59 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,10 @@ int	add_token(t_token **lst, t_token_type type, char *input, int *i)
 
 int	match_token(char *input, int *i, t_token **lst)
 {
-	while (ft_isspace(input[*i]))
+	while (ft_isspace(input[*i]) && input[*i])
 		(*i)++;
+	if (!input[*i])
+		return (0);
 	if (input[*i] == '|' && input[*i + 1] != '|')
 		return (add_token(lst, T_PIPE, input, i));
 	else if (input[*i] == '>' && input[*i + 1] == '>')
@@ -113,7 +115,8 @@ int	match_token(char *input, int *i, t_token **lst)
 		return (add_token(lst, T_CPAR, input, i));
 	else if (input[*i])
 		return (add_token(lst, T_IDENTIFIER, input, i));
-	return (1);
+	else
+		return (1);
 }
 
 t_token	*get_token(char *input, char *prompt)
@@ -125,7 +128,7 @@ t_token	*get_token(char *input, char *prompt)
 	lst = NULL;
 	while (input[i])
 	{
-		if (match_token(input, &i, &lst))
+		if (match_token(input, &i, &lst) == 1)
 		{
 			free(prompt);
 			free(input);
