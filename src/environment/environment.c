@@ -3,69 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 16:59:42 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/28 12:38:08 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/09 16:40:56 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_del_var(int i, char **env)
+void	checkenv(char ***environment)
 {
-	free(env[i]);
-	while (env[i] != NULL)
-	{
-		env[i] = env[i + 1];
-		i++;
-	}
-	ft_printf("deleted\n");
-}
+	char	*pwd;
+	char	*cwd;
 
-int	variable_exists2(char **env, char *var)
-{
-	int	i;
-
-	i = 0;
-	while (env[i] != NULL)
-	{
-		if (compare_till(env[i], var, '=') == 0)
-		{
-			free(var);
-			return (i);
-		}
-		i++;
-	}
-	free(var);
-	return (-1);
-}
-
-int	variable_exists(char **env, char *var)
-{
-	int	i;
-
-	i = 0;
-	while (env[i] != NULL)
-	{
-		if (compare_till(env[i], var, '=') == 0)
-			return (i);
-		i++;
-	}
-	return (-1);
+	cwd = getcwd(NULL, 0);
+	pwd = ft_strjoin("PWD=", cwd);
+	free(cwd);
+	if (variable_exists(*environment, "PWD") == -1)
+		ft_add_var(pwd, environment);
+	if (variable_exists(*environment, "SHLVL") == -1)
+		ft_add_var("SHLVL=1", environment);
+	free(pwd);
 }
 
 char	**env_init(char **input_env)
 {
 	int		i;
-	int		count;
 	char	**environment;
 
-	count = 0;
-	while (input_env[count] != NULL)
-		count++;
 	i = 0;
-	environment = malloc((count + 1) * sizeof(char *));
+	while (input_env[i] != NULL)
+		i++;
+	environment = malloc((i + 1) * sizeof(char *));
+	i = 0;
 	if (environment == NULL)
 		return (NULL);
 	while (input_env[i] != NULL)
@@ -75,12 +46,12 @@ char	**env_init(char **input_env)
 		{
 			while (i > 0)
 				free(environment[--i]);
-			free(environment);
-			return (NULL);
+			return (free(environment), NULL);
 		}
 		i++;
 	}
 	environment[i] = NULL;
+	checkenv(&environment);
 	return (environment);
 }
 

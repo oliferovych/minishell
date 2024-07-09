@@ -6,19 +6,19 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 17:28:12 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/17 15:13:08 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:43:53 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char *export_line(char *env_line)
+char	*export_line(char *env_line)
 {
-	char *line;
-	char *equal_sign;
-	size_t prefix_len;
-	size_t suffix_len;
-	char *new_env_line;
+	char	*line;
+	char	*equal_sign;
+	size_t	prefix_len;
+	size_t	suffix_len;
+	char	*new_env_line;
 
 	equal_sign = strchr(env_line, '=');
 	if (equal_sign)
@@ -27,11 +27,12 @@ char *export_line(char *env_line)
 		suffix_len = strlen(equal_sign + 1);
 		new_env_line = (char *)malloc(prefix_len + suffix_len + 3);
 		if (!new_env_line)
-			return NULL;
+			return (NULL);
 		ft_strlcpy(new_env_line, env_line, prefix_len + 1);
 		new_env_line[prefix_len] = '\0';
 		new_env_line[prefix_len] = '"';
-		ft_strlcpy(new_env_line + prefix_len + 1, equal_sign + 1, suffix_len + 1);
+		ft_strlcpy(new_env_line + prefix_len + 1, equal_sign + 1, suffix_len
+			+ 1);
 		ft_strlcat(new_env_line, "\"", prefix_len + suffix_len + 3);
 		line = ft_strjoin("declare -x ", new_env_line);
 		free(new_env_line);
@@ -41,7 +42,7 @@ char *export_line(char *env_line)
 	return (line);
 }
 
-void print_exp(char **exp)
+void	print_exp(char **exp)
 {
 	char	**array_copy;
 	int		i;
@@ -55,7 +56,7 @@ void print_exp(char **exp)
 	if (!array_copy)
 	{
 		perror("Failed to allocate memory");
-		return;
+		return ;
 	}
 	i = 0;
 	while (exp[i] != NULL)
@@ -69,11 +70,11 @@ void print_exp(char **exp)
 	free(array_copy);
 }
 
-char **exp_init(char **environment)
+char	**exp_init(char **environment)
 {
-	int i;
-	int count;
-	char **export;
+	int		i;
+	int		count;
+	char	**export;
 
 	count = 0;
 	while (environment[count] != NULL)
