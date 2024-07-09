@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:09 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 11:07:10 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/09 12:42:28 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	handle_r(t_token **token, t_data *data, t_ast **node, t_ast **prev_node)
 			|| (*token)->type == T_DGREAT || (*token)->type == T_DLESS))
 	{
 		create_node((*token)->type, &redir_node, data);
-		*token = (*token)->next;
 		create_redir_node(token, &redir_node);
 		if (*prev_node)
 			(*prev_node)->left = redir_node;

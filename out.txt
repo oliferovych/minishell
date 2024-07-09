@@ -1,2 +1,0 @@
-ls /Users/tomecker $HOME Libft out.txt hallo du
-baum haus

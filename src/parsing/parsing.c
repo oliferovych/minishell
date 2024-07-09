@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:04:38 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 11:04:39 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/09 12:45:26 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,10 @@ t_ast	*parse(t_token **token, t_data *old_data)
 		node = expr(3, token, data);
 	}
 	if (!node)
+	{
+		write(1, "\naa\n", 4);	
 		return (free(data), NULL);
+	}
 	free(data);
 	return (node);
 }
