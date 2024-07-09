@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/05 11:27:29 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/07 17:09:14 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,17 @@ void			free_ast(t_ast *node);
 int				error_indicator(int i, char *str);
 t_ast			*expr(int prec, t_token **token, t_data *data);
 char			*strcutoff_front(const char *str, char c);
+void			ft_token_list_add_back(t_token **lst, t_token *new_token);
+char			*transform_arg(t_ast **node, t_token *token, int k);
+t_ast			*create_ast_node(t_node_type type, t_data *data);
+void			create_node(t_token_type type, t_ast **node, t_data *data);
+char			*create_redir_node(t_token **token, t_ast **redir_node);
+char			*create_command_node(t_token **token,
+					t_ast **node, t_data *data);
+void			handle_r(t_token **token, t_data *data,
+					t_ast **node, t_ast **prev_node);
+void			handle_c(t_token **token, t_data *data,
+					t_ast **node, t_ast **prev_redi);
 
 //EXECUTION
 void			evaluate_ast(t_ast *ast);
@@ -80,9 +91,10 @@ void			ft_swap(char **a, char **b);
 void			bubble_sort(char **array, int size);
 t_ast			*ft_get_ast(void);
 char			*remove_char(const char *str, char char_to_remove);
+void			free_double_array_char(char **array);
 
 //WILDCARDS
-void			handle_wildcards(char *str, char **res);
+char			*handle_wildcards(char *str);
 char			*ft_str_join_free(char *s1, char *s2);
 
 #endif

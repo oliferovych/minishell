@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sorting.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 14:22:31 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/25 14:22:31 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/07 17:11:12 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void ft_swap(char **a, char **b)
+void	ft_swap(char **a, char **b)
 {
 	char	*temp;
 
@@ -21,7 +21,7 @@ void ft_swap(char **a, char **b)
 	*b = temp;
 }
 
-void bubble_sort(char **array, int size)
+void	bubble_sort(char **array, int size)
 {
 	int		i;
 	int		j;
@@ -42,7 +42,7 @@ void bubble_sort(char **array, int size)
 			j++;
 		}
 		if (!swapped)
-			break;
+			break ;
 		i++;
 	}
 }

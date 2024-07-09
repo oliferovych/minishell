@@ -1,15 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wildcards.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/09 11:07:40 by tecker            #+#    #+#             */
+/*   Updated: 2024/07/09 11:07:41 by tecker           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 #include <dirent.h>
-
-void	free_double_array_char(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i])
-		free(array[i++]);
-	free(array);
-}
 
 char	**custom_realloc(char **ptr, size_t old_size, size_t new_size)
 {
@@ -116,14 +118,20 @@ char	*join_together(char **array)
 	return (free(array), res);
 }
 
-void	handle_wildcards(char *str, char **res)
+char	*handle_wildcards(char *str)
 {
 	char	**array;
+	char	*res;
 
+	array = NULL;
+	res = NULL;
 	array = search_with_wildcards(str);
 	if (!array)
-		error_indicator(1, "wildcard parsing failed");
-	*res = join_together(array);
-	if (!(*res))
-		error_indicator(1, "wildcard parsing failed");
+		return (NULL);
+	if (!array[0])
+		return (free(array[0]), NULL);
+	res = join_together(array);
+	if (!(res))
+		return (NULL);
+	return (res);
 }

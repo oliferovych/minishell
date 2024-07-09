@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 15:08:37 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/27 10:47:33 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/07 17:13:27 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,12 @@ typedef struct s_shell
 
 typedef struct s_data
 {
-	char *prompt;
-	char *input;
-	char **env;
-	char **exp;
-	t_token *token;
+	char	*prompt;
+	char	*input;
+	char	**env;
+	char	**exp;
+	t_token	*token;
 }				t_data;
-
 
 typedef struct s_ast
 {
@@ -54,5 +53,13 @@ typedef struct s_ast
 	struct s_shell	ms;
 	int				**tran;
 }					t_ast;
+
+typedef struct s_nud
+{
+	t_ast	*node;
+	t_ast	*cmd_node;
+	t_ast	*redir_node;
+	t_ast	*prev_redir_node;
+}				t_nud;
 
 #endif
