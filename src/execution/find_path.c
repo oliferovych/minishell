@@ -22,7 +22,12 @@ char	*ft_find_path(t_ast *ast)
 		|| access(ast->args[0], F_OK) == 0)
 		path = ft_strdup(ast->args[0]);
 	else
-		path = ft_strdup(ast->ms.env[variable_exists(ast->ms.env, "PATH")] + 5);
+	{
+		if (variable_exists(ast->ms.env, "PATH") != -1)
+			path = ft_strdup(ast->ms.env[variable_exists(ast->ms.env, "PATH")] + 5);
+		else
+			path = ft_strdup(ast->args[0]);
+	}
 	return (path);
 }
 
