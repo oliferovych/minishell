@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/28 12:37:47 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/09 16:43:50 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,18 @@ static t_data	*data_init(char **envp)
 	return (data);
 }
 
-static void	get_input(t_data *data, t_ast *ast)
+static void	get_input(t_data *data)
 {
 	data->prompt = get_prompt();
 	data->input = readline(data->prompt);
 	if (!data->input)
 	{
 		ft_printf("%sexit\n", data->prompt);
-		if (ast != NULL)
-			free_all(ast, 1);
-		else
-		{
-			free(data->prompt);
-			free(data->input);
-			free_environment(data->env);
-			free_environment(data->exp);
-			free(data);
-		}
+		free(data->prompt);
+		free(data->input);
+		free_environment(data->env);
+		free_environment(data->exp);
+		free(data);
 		exit(0);
 	}
 	add_history(data->input);
@@ -71,13 +66,14 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	atexit(leaks);
 	ft_initialize_signals();
 	data = data_init(envp);
 	ast = ft_get_ast();
 	ast = NULL;
 	while (1)
 	{
-		get_input(data, ast);
+		get_input(data);
 		token = get_token(data->input, data->prompt);
 		// tmp = token;
 		// print_token(tmp);
