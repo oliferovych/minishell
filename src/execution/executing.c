@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:09:27 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/25 15:13:49 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/09 17:18:44 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int redirect(t_ast *ast)
 	}
 	else if (ast->type == N_DLESS)
 	{
+		ft_sigmode_heredoc();
 		fd2 = open("heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
 		if (fd2 < 0)
 			ft_error(ast, "redirection");
@@ -86,6 +87,7 @@ int redirect(t_ast *ast)
 			close(fd);
 			ft_error(ast, "redirection");
 		}
+		ft_sigmode_shell();
 	}
 	else if (ast->type == N_GREAT)
 	{

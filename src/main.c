@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/28 12:37:47 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/09 16:50:30 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,9 @@ int	main(int argc, char **argv, char **envp)
 		token = get_token(data->input, data->prompt);
 		// tmp = token;
 		// print_token(tmp);
+		write(1, "\naa\n", 4);
 		ast = parse(&token, data);
+		write(1, "\nbb\n", 4);
 		// printf("\n\n");
 		// print_ast(ast);
 		evaluate_ast(ast);
