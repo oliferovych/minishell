@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 22:12:52 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/09 17:21:41 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:07:11 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,3 @@ void	ft_initialize_signals(void)
 	rl_catch_signals = 0;
 	ft_sigmode_shell();
 }
-
