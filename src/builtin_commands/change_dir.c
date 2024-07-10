@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:12:28 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/09 16:43:45 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:54:54 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,10 @@ void	ch_dir(t_ast *ast)
 	}
 	if (chdir(ast->args[1]) == -1)
 	{
-		ft_printf("%s: %s\n", strerror(errno), ast->args[1]);
-		return ;
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(ast->args[1], 2);
+		return ((void)(ast->ms.exit_code = 1));
 	}
 	change_pwd(ast);
 }

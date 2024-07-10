@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:58:31 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/09 14:59:52 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:44:45 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	ft_del_var(int i, char **env)
 		env[i] = env[i + 1];
 		i++;
 	}
-	ft_printf("deleted\n");
 }
 
 int	variable_exists2(char **env, char *var)
