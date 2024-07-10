@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 18:15:46 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 17:06:32 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:37:38 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void	ft_exp(t_ast *ast)
 		i = 1;
 		while (ast->args[i] != NULL)
 		{
+			if (!check_string(ast->args[i]))
+				break ;
 			if (ft_strchr(ast->args[i], '='))
 			{
 				if (variable_exists(ast->ms.env, ast->args[i]) == -1)
