@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_algo.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:09 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 12:42:28 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/10 16:52:31 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_ast	*create_ast_node(t_node_type type, t_data *data)
 		node->ms.prompt = data->prompt;
 		node->ms.env = data->env;
 		node->ms.exp = data->exp;
+		node->ms.exit_code = data->exit_code;
 	}
 	else
 		return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/07 17:09:14 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/10 16:36:07 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ void			command_execute(t_ast *ast);
 int				command_is_builtin(char **args);
 void			ft_execute_builtin(t_ast *ast, int builtin);
 void			ft_execvp(t_ast *ast);
-void			ft_errorcode_exit(char *command, int code);
+void			ft_errorcode_exit(char *command, char *path);
+int				get_status(int status);
 
 //ENVIRONMENT
 char			**env_init(char **input_env);
