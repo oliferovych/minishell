@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 16:36:07 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:15:49 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void			bubble_sort(char **array, int size);
 t_ast			*ft_get_ast(void);
 char			*remove_char(const char *str, char char_to_remove);
 void			free_double_array_char(char **array);
+void			free_command(t_ast *node, int i);
 
 //WILDCARDS
 char			*handle_wildcards(char *str);
