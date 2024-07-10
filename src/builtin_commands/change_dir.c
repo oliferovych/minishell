@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:12:28 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 17:54:54 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/10 18:18:40 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,13 @@ void	change_pwd(t_ast *ast)
 	pwd = ft_strjoin("PWD=", cwd);
 	free(cwd);
 	exppwd = export_line(pwd);
-	if (variable_exists(ast->ms.env, "PWD") != -1)
+	if (variable_exists(ast->ms.exp, "declare -x PWD") != -1)
 	{
-		ft_change_existing(pwd, ast->ms.env);
+		if (variable_exists(ast->ms.env, "PWD") != -1)
+			ft_change_existing(pwd, ast->ms.env);
+		else
+			ft_add_var(pwd, &ast->ms.env);
 		ft_change_existing(exppwd, ast->ms.exp);
-	}
-	else
-	{
-		ft_add_var(pwd, &ast->ms.env);
-		ft_add_var(exppwd, &ast->ms.exp);
 	}
 	free(pwd);
 	free(exppwd);
@@ -68,15 +66,13 @@ void	change_oldpwd(t_ast *ast)
 	pwd = ft_strjoin("OLDPWD=", cwd);
 	free(cwd);
 	exppwd = export_line(pwd);
-	if (variable_exists(ast->ms.env, "OLDPWD") != -1)
+	if (variable_exists(ast->ms.exp, "declare -x OLDPWD") != -1)
 	{
-		ft_change_existing(pwd, ast->ms.env);
+		if (variable_exists(ast->ms.env, "OLDPWD") != -1)
+			ft_change_existing(pwd, ast->ms.env);
+		else
+			ft_add_var(pwd, &ast->ms.env);
 		ft_change_existing(exppwd, ast->ms.exp);
-	}
-	else
-	{
-		ft_add_var(pwd, &ast->ms.env);
-		ft_add_var(exppwd, &ast->ms.exp);
 	}
 	free(pwd);
 	free(exppwd);
@@ -100,7 +96,7 @@ void	ch_dir(t_ast *ast)
 {
 	char	*path;
 
-	if (ft_strcmp(ast->args[1], "-") == 0)
+	if (ast->args[1] != NULL && ft_strcmp(ast->args[1], "-") == 0)
 		return (back_to_oldpwd(ast));
 	change_oldpwd(ast);
 	if (ast->args[1] == NULL || ft_strcmp(ast->args[1], "~") == 0)
@@ -111,6 +107,7 @@ void	ch_dir(t_ast *ast)
 					"HOME")], '=');
 		chdir(path);
 		free(path);
+		change_pwd(ast);
 		return ;
 	}
 	if (chdir(ast->args[1]) == -1)
