@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:04:38 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 12:45:26 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/09 20:59:11 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,20 +93,18 @@ t_ast	*parse(t_token **token, t_data *old_data)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (NULL);
-	else
-	{
-		data->prompt = old_data->prompt;
-		data->input = old_data->input;
-		data->token = *token;
-		data->env = old_data->env;
-		data->exp = old_data->exp;
-		node = expr(3, token, data);
-	}
+	data->prompt = old_data->prompt;
+	data->input = old_data->input;
+	data->token = *token;
+	data->env = old_data->env;
+	data->exp = old_data->exp;
+	if (!(*token))
+		return (NULL);
+	node = expr(3, token, data);
 	if (!node)
 	{
 		write(1, "\naa\n", 4);	
 		return (free(data), NULL);
 	}
-	free(data);
-	return (node);
+	return (free(data), node);
 }

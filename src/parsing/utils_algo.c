@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_algo.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:09 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 12:42:28 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/09 22:53:01 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ void	handle_r(t_token **token, t_data *data, t_ast **node, t_ast **prev_node)
 	t_ast	*redir_node;
 
 	redir_node = NULL;
-	while (*token && ((*token)->type == T_LESS || (*token)->type == T_GREAT
-			|| (*token)->type == T_DGREAT || (*token)->type == T_DLESS))
+	while (*token && (is_redirection((*token)->type)))
 	{
 		create_node((*token)->type, &redir_node, data);
 		create_redir_node(token, &redir_node);
@@ -87,6 +86,8 @@ void	handle_c(t_token **token, t_data *data, t_ast **node, t_ast **prev_redi)
 	t_ast	*cmd_node;
 
 	cmd_node = NULL;
+	if (!(*token))
+		return ;
 	if ((*token)->type == T_IDENTIFIER)
 	{
 		create_command_node(token, &cmd_node, data);

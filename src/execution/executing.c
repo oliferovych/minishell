@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:09:27 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/09 17:18:44 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/10 19:50:11 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,13 @@ int redirect(t_ast *ast)
 	{
 		fd = open(ast->filename, O_RDONLY);
 		if (fd < 0)
-			ft_error(ast, "redirection");
+			return(ft_printf("redirect failed\n"), 1);
 		res = dup2(fd, STDIN_FILENO);
 		if (res < 0)
 		{
 			close(fd);
-			ft_error(ast, "redirection");
+			return (ft_printf("redirect failed\n"), 1);
+
 		}
 	}
 	else if (ast->type == N_DLESS)
@@ -62,7 +63,7 @@ int redirect(t_ast *ast)
 		ft_sigmode_heredoc();
 		fd2 = open("heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
 		if (fd2 < 0)
-			ft_error(ast, "redirection");
+			return (ft_printf("redirect failed\n"), 1);
 		while (1)
 		{
 			line = readline("> ");
@@ -80,12 +81,12 @@ int redirect(t_ast *ast)
 		close(fd2);
 		fd = open("heredoc_buffer", O_RDONLY);
 		if (fd < 0)
-			ft_error(ast, "redirection");
+			return (ft_printf("redirect failed\n"), 1);
 		res = dup2(fd, STDIN_FILENO);
 		if (res < 0)
 		{
 			close(fd);
-			ft_error(ast, "redirection");
+			return (ft_printf("redirect failed\n"), 1);
 		}
 		ft_sigmode_shell();
 	}
@@ -93,24 +94,27 @@ int redirect(t_ast *ast)
 	{
 		fd = open(ast->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
-			ft_error(ast, "redirection");
+			return (ft_printf("redirect failed\n"), 1);
 		res = dup2(fd, STDOUT_FILENO);
 		if (res < 0)
 		{
 			close(fd);
-			ft_error(ast, "redirection");
+			return (ft_printf("redirect failed\n"), 1);
+
 		}
 	}
 	else
 	{
 		fd = open(ast->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd < 0)
-			ft_error(ast, "redirection");
+			return (ft_printf("redirect failed\n"), 1);
+
 		res = dup2(fd, STDOUT_FILENO);
 		if (res < 0)
 		{
 			close(fd);
-			ft_error(ast, "redirection");
+			return (ft_printf("redirect failed\n"), 1);
+
 		}
 	}
 	if (fd >= 0)
@@ -141,16 +145,16 @@ int scan_for_heredoc(t_ast *ast)
 }
 
 
-void pipe_execution(t_ast *ast)
+void *pipe_execution(t_ast *ast)
 {
 	int pipefd[2];
 	pid_t pid1;
 	pid_t pid2;
 
 	if (scan_for_heredoc(ast->left))
-		return (evaluate_ast(ast->left));
+		return (evaluate_ast(ast->left), NULL);
 	else if (scan_for_heredoc(ast->right))
-		return (evaluate_ast(ast->right));
+		return (evaluate_ast(ast->right), NULL);
 	if (pipe(pipefd) == -1)
 		ft_error(ast, "pipe");
 	pid1 = fork();
@@ -179,6 +183,7 @@ void pipe_execution(t_ast *ast)
 	close (pipefd[1]);
 	if (waitpid(pid1, NULL, 0) == -1 || waitpid(pid2, NULL, 0) == -1)
 		ft_error(ast, "waitpid");
+	return (NULL);
 }
 
 void and_or_execution(t_ast *ast)
@@ -226,11 +231,13 @@ void and_or_execution(t_ast *ast)
 	}
 }
 
-void	evaluate_ast(t_ast *ast)
+int	evaluate_ast(t_ast *ast)
 {
 	int	std_in;
 	int	std_out;
 
+	if (!ast || !ast->ms.token)
+		return (1);
 	if (ast->type == N_LESS || ast->type == N_GREAT || ast->type == N_DGREAT || ast->type == N_DLESS)
 	{
 		std_in = dup(STDIN_FILENO);
@@ -252,4 +259,5 @@ void	evaluate_ast(t_ast *ast)
 		and_or_execution(ast);
 	if (ast->type == N_COMMAND)
 		command_execute(ast);
+	return (0);
 }

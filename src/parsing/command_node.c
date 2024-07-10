@@ -3,41 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   command_node.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:04:29 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 11:04:30 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/09 23:19:14 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	fill_args(t_token *curr_token, t_ast **node, int a_count, int i)
+void fill_args(t_token *curr_token, t_ast **node, int a_count, int i)
 {
-	while (curr_token && curr_token->type == T_IDENTIFIER)
-	{
-		(*node)->args[i] = transform_arg(node, curr_token, i);
-		if (!(*node)->args[i++])
-			return ;
-		curr_token = curr_token->next;
-	}
-	if (curr_token && (curr_token->type == T_LESS
-			|| curr_token->type == T_GREAT || curr_token->type == T_DGREAT))
-	{
-		if (curr_token->next && curr_token->next->type == T_IDENTIFIER)
-		{
-			curr_token = curr_token->next->next;
-			while (curr_token && curr_token->type == T_IDENTIFIER)
-			{
-				(*node)->args[i] = transform_arg(node, curr_token, i);
-				if (!(*node)->args[i++])
-					return ;
-				curr_token = curr_token->next;
-			}
-		}
-	}
-	(*node)->args[a_count] = NULL;
+    while (curr_token && curr_token->type == T_IDENTIFIER)
+    {
+        (*node)->args[i] = transform_arg(node, curr_token, i);
+        if (!(*node)->args[i++])
+            return;
+        curr_token = curr_token->next;
+    }
+    while (curr_token && is_redirection(curr_token->type))
+    {
+        curr_token = curr_token->next;
+        if (curr_token && curr_token->type == T_IDENTIFIER)
+            curr_token = curr_token->next;
+    }
+    while (curr_token && curr_token->type == T_IDENTIFIER)
+    {
+        (*node)->args[i] = transform_arg(node, curr_token, i);
+        if (!(*node)->args[i++])
+            return;
+        curr_token = curr_token->next;
+    }
+    (*node)->args[a_count] = NULL;
 }
+
 
 char	*allocate_command_memory(t_ast **node, int arg_count)
 {
@@ -63,21 +62,33 @@ int	count_args(t_token **curr_token)
 
 int	handle_redir(t_token **token, t_ast **node, t_data *data, int arg_count)
 {
-	if (*token && ((*token)->type == T_LESS
-			|| (*token)->type == T_GREAT
-			|| (*token)->type == T_DGREAT
-			|| (*token)->type == T_DLESS))
+	t_ast *prev_node;
+
+	prev_node = NULL;
+	handle_r(token, data, node, &prev_node);
+	while (*token && ((*token)->type == T_IDENTIFIER))
 	{
-		create_node((*token)->type, node, data);
-		create_redir_node(token, node);
-		while (*token && ((*token)->type == T_IDENTIFIER))
-		{
-			(arg_count)++;
-			*token = (*token)->next;
-		}
+		(arg_count)++;
+		*token = (*token)->next;
 	}
 	return (arg_count);
 }
+
+void link_redir_nodes(t_ast **redir_node, t_ast **command_node)
+{
+    t_ast *last_redir_node;
+
+	last_redir_node = NULL;
+	if (*redir_node)
+    {
+        last_redir_node = *redir_node;
+        while (last_redir_node->left)
+            last_redir_node = last_redir_node->left;
+        last_redir_node->left = *command_node;
+        *command_node = *redir_node;
+    }
+}
+
 
 char	*create_command_node(t_token **token, t_ast **node, t_data *data)
 {
@@ -90,20 +101,14 @@ char	*create_command_node(t_token **token, t_ast **node, t_data *data)
 	i = 0;
 	redir_node = NULL;
 	curr_token = *token;
-	arg_count = 0;
-	(*node) = create_ast_node(N_COMMAND, data);
 	arg_count = count_args(&curr_token);
 	after_token = curr_token;
 	arg_count = handle_redir(&after_token, &redir_node, data, arg_count);
+	(*node) = create_ast_node(N_COMMAND, data);
 	if (!allocate_command_memory(node, arg_count))
 		return (NULL);
-	curr_token = *token;
-	fill_args(curr_token, node, arg_count, i);
+	fill_args(*token, node, arg_count, i);
 	*token = after_token;
-	if (redir_node)
-	{
-		redir_node->left = *node;
-		*node = redir_node;
-	}
+	link_redir_nodes(&redir_node, node);
 	return ("ok");
 }

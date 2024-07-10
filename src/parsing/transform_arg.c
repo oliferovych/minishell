@@ -3,22 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   transform_arg.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 11:07:20 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/10 17:14:18 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+int	count_single_quotes(char *str)
+{
+	int i;
+	int count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 char	*transform_arg_single_quote(char *str, int *i, int k, t_ast **node)
 {
 	int		j;
 	char	*tmp;
+	int		count;
 
-	(*i)++;
+	count = count_single_quotes(str);
+	if (count % 2 == 0)
+		(*i)++;
 	j = *i;
+	if (count % 2 != 0)
+		(*i)++;
 	while (str[*i] && str[*i] != '\'')
 		(*i)++;
 	tmp = ft_substr(str, j, *i - j);
@@ -35,7 +56,7 @@ char	*transform_argiables(char *str, int *i, t_ast **node)
 
 	(*i)++;
 	j = *i;
-	while (str[*i] && isalnum(str[*i]))
+	while (str[*i] && (isalnum(str[*i]) || str[*i] == '?'))
 		(*i)++;
 	if (variable_exists2((*node)->ms.env, ft_substr(str, j, *i - j)) != -1)
 		tmp = strcutoff_front((*node)->ms.env[variable_exists2((*node)->ms.env,
@@ -90,6 +111,8 @@ char	*transform_arg(t_ast **node, t_token *token, int k)
 	char	*res;
 
 	str = token->value;
+	if (!str)
+		return (NULL);
 	res = ft_strdup("");
 	(*node)->tran[k] = malloc(sizeof(int));
 	if (!(*node)->tran[k] || !res)
