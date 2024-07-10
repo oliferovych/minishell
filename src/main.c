@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/09 16:50:30 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 00:38:59 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,20 @@ static t_data	*data_init(char **envp)
 	return (data);
 }
 
-static void	get_input(t_data *data, t_ast *ast)
+static void	get_input(t_data *data)
 {
 	data->prompt = get_prompt();
 	data->input = readline(data->prompt);
 	if (!data->input)
+		write(1, "dd\n", 3);
+	if (!data->input)
 	{
 		ft_printf("%sexit\n", data->prompt);
-		if (ast != NULL)
-			free_all(ast, 1);
-		else
-		{
-			free(data->prompt);
-			free(data->input);
-			free_environment(data->env);
-			free_environment(data->exp);
-			free(data);
-		}
+		free(data->prompt);
+		free(data->input);
+		free_environment(data->env);
+		free_environment(data->exp);
+		free(data);
 		exit(0);
 	}
 	add_history(data->input);
@@ -74,21 +71,21 @@ int	main(int argc, char **argv, char **envp)
 	ft_initialize_signals();
 	data = data_init(envp);
 	ast = ft_get_ast();
-	ast = NULL;
 	while (1)
 	{
-		get_input(data, ast);
+		ast = NULL;
+		get_input(data);
 		token = get_token(data->input, data->prompt);
 		// tmp = token;
 		// print_token(tmp);
-		write(1, "\naa\n", 4);
 		ast = parse(&token, data);
-		write(1, "\nbb\n", 4);
 		// printf("\n\n");
 		// print_ast(ast);
-		evaluate_ast(ast);
-		data->env = ast->ms.env;
-		data->exp = ast->ms.exp;
+		if (!evaluate_ast(ast, 1))
+		{
+			data->env = ast->ms.env;
+			data->exp = ast->ms.exp;
+		}
 		free_all(ast, 0);
 	}
 }
