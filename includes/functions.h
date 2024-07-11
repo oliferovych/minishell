@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 13:45:23 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:31:31 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void			ft_initialize_signals(void);
 //UTILITIES
 void			free_all(t_ast *ast, int flag);
 void			free_environment(char **environment);
-void			ft_error(t_ast *ast, char *str);
+int				ft_error(t_ast *ast, char *str);
 int				compare_till_in_1(char *str1, char *str2, char c);
 int				compare_till(char *str1, char *str2, char c);
 int				check_filename(t_ast *ast);

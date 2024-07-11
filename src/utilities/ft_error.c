@@ -6,16 +6,16 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 17:09:35 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 17:09:37 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/11 14:29:49 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_error(t_ast *ast, char *str)
+int	ft_error(t_ast *ast, char *str)
 {
-	if (str)
-		ft_printf("%s\n", str);
-	free_all(ast, 1);
-	exit(1);
+	ast->ms.exit_code = 1;
+	ft_putstr_fd("minishell: ", 2);
+	ft_putendl_fd(str, 2);
+	return (1);
 }

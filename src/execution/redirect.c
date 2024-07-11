@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:38:52 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 13:40:28 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:37:20 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ int	out(int *fd, t_ast *ast)
 
 	*fd = open(ast->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*fd < 0)
-		return (ft_printf("redirect failed\n"), 1);
+		return (ft_error(ast, "redirect failed"));
 	res = dup2(*fd, STDOUT_FILENO);
 	if (res < 0)
 	{
 		close(*fd);
-		return (ft_printf("redirect failed\n"), 1);
+		return (ft_error(ast, "redirect failed"));
 	}
 	return (0);
 }
@@ -34,12 +34,12 @@ int	in(int *fd, t_ast *ast)
 
 	*fd = open(ast->filename, O_RDONLY);
 	if (fd < 0)
-		return (ft_printf("redirect failed\n"), 1);
+		return (ft_error(ast, "redirect failed"));
 	res = dup2(*fd, STDIN_FILENO);
 	if (res < 0)
 	{
 		close(*fd);
-		return (ft_printf("redirect failed\n"), 1);
+		return (ft_error(ast, "redirect failed"));
 	}
 	return (0);
 }
@@ -50,12 +50,12 @@ int	append(int *fd, t_ast *ast)
 
 	*fd = open(ast->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (*fd < 0)
-		return (ft_printf("redirect failed\n"), 1);
+		return (ft_error(ast, "redirect failed"));
 	res = dup2(*fd, STDOUT_FILENO);
 	if (res < 0)
 	{
 		close(*fd);
-		return (ft_printf("redirect failed\n"), 1);
+		return (ft_error(ast, "redirect failed"));
 	}
 	return (0);
 }
