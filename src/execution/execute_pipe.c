@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:36:08 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 13:38:03 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:43:35 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	handle_redirection(t_ast *ast)
 {
-	if (ast->left->type == N_LESS || ast->left->type == N_DLESS ||
-		ast->left->type == N_GREAT || ast->left->type == N_DGREAT)
+	if (ast->left->type == N_LESS || ast->left->type == N_DLESS
+		|| ast->left->type == N_GREAT || ast->left->type == N_DGREAT)
 	{
 		if (redirect(ast->left) != 0)
 			return (ft_printf("piping failed\n"), 1);
