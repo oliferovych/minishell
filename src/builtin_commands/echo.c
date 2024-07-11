@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:53:39 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 17:02:14 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/11 16:25:40 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_echo(t_ast *ast)
         flag++;
         i++;
     }
-	else if (ast->args[i])
+	if (ast->args[i])
 	{
 		while(ast->args[i])
 		{

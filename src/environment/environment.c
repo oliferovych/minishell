@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 16:59:42 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 15:48:06 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/11 16:51:06 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ void	increment_shlvl(char **environment)
 	value = ft_strcutoff_front(environment[variable_exists(environment,
 				"SHLVL")], '=');
 	lvl = ft_atoi(value);
-	lvl++;
-	if (lvl > 1000)
+	if (lvl > 1000 || lvl <= 0)
 		lvl = 1;
+	else
+		lvl++;
 	free(value);
 	temp = ft_itoa(lvl);
-	value = ft_strjoin("SHLVL=", value);
+	value = ft_strjoin("SHLVL=", temp);
 	ft_change_existing(value, environment);
 	free(value);
 	free(temp);
