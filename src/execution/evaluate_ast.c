@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:34:47 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 19:20:58 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/11 21:16:46 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	restore_std(int std_in, int std_out)
 	dup2(std_out, STDOUT_FILENO);
 	close(std_in);
 	close(std_out);
-	if (access("heredoc_buffer", F_OK) != -1)
-		unlink("heredoc_buffer");
+	if (access(".heredoc_buffer", F_OK) != -1)
+		unlink(".heredoc_buffer");
 }
 
 int	evaluate_ast(t_ast *ast, int flag)

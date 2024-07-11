@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:42:18 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 20:05:25 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:45:30 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,21 @@ int	and_or_execution(t_ast *ast)
 
 	pid1 = fork();
 	if (pid1 == -1)
-		return (ft_printf("and/or failed\n"), 1);
+		return (ft_error(ast, "and/or failed"));
 	if (pid1 == 0)
 		handle_first_child(ast);
 	if (waitpid(pid1, &status, 0) == -1)
-		return (ft_printf("and/or failed\n"), 1);
+		return (ft_error(ast, "and/or failed"));
 	if (WIFEXITED(status) && ((WEXITSTATUS(status) == 0 && ast->type == N_AND)
 			|| (WEXITSTATUS(status) != 0 && ast->type == N_OR)))
 	{
 		pid2 = fork();
 		if (pid2 == -1)
-			return (ft_printf("and/or failed\n"), 1);
+			return (ft_error(ast, "and/or failed"));
 		if (pid2 == 0)
 			handle_secound_child(ast);
 		else if (waitpid(pid2, NULL, 0) == -1)
-			return (ft_printf("and/or failed\n"), 1);
+			return (ft_error(ast, "and/or failed"));
 	}
 	return (0);
 }

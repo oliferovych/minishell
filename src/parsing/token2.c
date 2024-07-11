@@ -1,125 +1,63 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token2.c                                           :+:      :+:    :+:   */
+/*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/11 14:31:47 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:32:17 by tecker           ###   ########.fr       */
+/*   Created: 2024/07/09 11:07:14 by tecker            #+#    #+#             */
+/*   Updated: 2024/07/11 14:36:53 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*check_quotes(char *val, int *quote, int remove)
+t_token	*ft_new_token(char *value, t_token_type type)
 {
-	char	*tmp;
-	int		comp_res;
+	t_token	*new_token;
 
-	comp_res = compare_quotes(quote, val, &remove);
-	if ((ft_strstr(val, "=\"") && quote[1] % 2 == 0)
-		|| (ft_strstr(val, "=\'") && quote[0] % 2 == 0))
+	new_token = (t_token *)ft_calloc(1, sizeof(t_token));
+	if (!new_token)
 	{
-		if (ft_strstr(val, "=\'") && quote[0] % 2 == 0)
-			remove = 0;
+		error_indicator(1, "calloc");
+		return (NULL);
 	}
-	else if (((quote[0] % 2 != 0 || quote[1] % 2 != 0) && comp_res))
+	new_token->value = ft_strdup(value);
+	if (!new_token->value)
 	{
-		return (ft_printf("unexpected EOF while looking for matching quote\n")
-			, NULL);
+		error_indicator(1, "dupe value to token");
+		free(new_token);
+		return (NULL);
 	}
-	if (remove && comp_res == 0)
-		val = remove_char(val, '\"');
-	else
-	{
-		tmp = val;
-		val = ft_strtrim(val, "\"");
-		free(tmp);
-	}
-	return (val);
+	new_token->type = type;
+	return (new_token);
 }
 
-char	*check_value(char *val, int *quote)
+int	add_token(t_token **lst, t_token_type type, char *input, int *i)
 {
-	if (!val)
-		return (error_indicator(1, "substr"), NULL);
-	val = check_quotes(val, quote, 1);
-	return (val);
-}
-
-void	handle_double_quote(char **str, int *i)
-{
-	char	*res;
-	int		j;
-	int		k;
-
-	k = 0;
-	j = 0;
-	res = malloc(strlen(*str) + 3);
-	while ((*str)[k] && k < *i)
-		res[j++] = (*str)[k++];
-	res[j++] = '\'';
-	res[j++] = '\'';
-	while ((*str)[k])
-		res[j++] = (*str)[k++];
-	res[j] = '\0';
-	*i = k;
-	free(*str);
-	*str = res;
-}
-
-char	*handle_quotes(char *str)
-{
-	int	i;
-	int	quotes;
-
-	quotes = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-		{
-			while (str[i])
-			{
-				if (quotes == 2)
-					return (str);
-				if (str[i] == '\"' && (str[i + 1]) && str[i + 1] != '$')
-				{
-					handle_double_quote(&str, &i);
-					quotes++;
-				}
-				i++;
-			}
-		}
-		i++;
-	}
-	return (str);
-}
-
-char	*process_value(char *input, int *i)
-{
+	t_token	*new;
 	char	*value;
-	int		j;
-	int		quote[2];
-	int		count;
 
-	j = *i;
-	count = 0;
-	quote[0] = 0;
-	quote[1] = 0;
-	while (input[count + j] && (!ft_isspace(input[count + j])
-			|| (quote[0] % 2 != 0 || quote[1] % 2 != 0))
-		&& input[j + count] != ')')
+	if (type == T_OPAR || type == T_CPAR
+		|| type == T_PIPE || type == T_GREAT || type == T_LESS)
 	{
-		if (input[j + count] == '\'')
-			quote[0]++;
-		else if (input[j + count] == '\"')
-			quote[1]++;
-		(count)++;
+		value = ft_substr(input, *i, 1);
+		(*i)++;
 	}
-	*i = j + count;
-	value = ft_substr(input, j, count);
-	value = handle_quotes(value);
-	return (check_value(value, quote));
+	else if (type == T_DGREAT || type == T_DLESS
+		|| type == T_OR || type == T_AND)
+	{
+		value = ft_substr(input, *i, 2);
+		(*i) += 2;
+	}
+	else
+		value = process_value(input, i);
+	if (!value)
+		return (1);
+	new = ft_new_token(value, type);
+	if (!new)
+		return (free(value), 1);
+	ft_token_list_add_back(lst, new);
+	free(value);
+	return (0);
 }
