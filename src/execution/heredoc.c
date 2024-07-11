@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:39:23 by tecker            #+#    #+#             */
 /*   Updated: 2024/07/11 14:42:53 by tecker           ###   ########.fr       */
@@ -18,7 +18,7 @@ int	reset_stdin_to_tty(void)
 
 	reset_stdin = open("/dev/tty", O_RDONLY);
 	if (reset_stdin < 0)
-		return (ft_printf("redirect failed\n"), 1);
+		return (ft_error(ft_get_ast(), "redirect failed"));
 	dup2(reset_stdin, STDIN_FILENO);
 	close(reset_stdin);
 	return (0);
@@ -29,7 +29,7 @@ int	open_heredoc_buffer(int *fd2)
 	*fd2 = open("heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC
 			| O_APPEND, 0644);
 	if (*fd2 < 0)
-		return (ft_printf("redirect failed\n"), 1);
+		return (ft_error(ft_get_ast(), "redirect failed"));
 	return (0);
 }
 
@@ -61,11 +61,11 @@ int	set_heredoc_fd(int *fd)
 {
 	*fd = open("heredoc_buffer", O_RDONLY);
 	if (*fd < 0)
-		return (ft_printf("redirect failed\n"), 1);
+		return (ft_error(ft_get_ast(), "redirect failed"));
 	if (dup2(*fd, STDIN_FILENO) < 0)
 	{
 		close(*fd);
-		return (ft_printf("redirect failed\n"), 1);
+		return (ft_error(ft_get_ast(), "redirect failed"));
 	}
 	return (0);
 }

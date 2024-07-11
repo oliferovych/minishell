@@ -14,17 +14,16 @@
 
 void	ft_echo(t_ast *ast)
 {
-	int	i;
-	int	flag;
-
-	i = 1;
-	flag = 0;
-	if (ast->args[i] && ft_strnstr(ast->args[i], "-n", 2) != NULL)
-	{
-		flag++;
-		i++;
-	}
-	else if (ast->args[i])
+    int i;
+    int flag;
+    i = 1;
+    flag = 0;
+    if (ast->args[i] && ft_strnstr(ast->args[i], "-n", 2) != NULL)
+    {
+        flag++;
+        i++;
+    }
+	if (ast->args[i])
 	{
 		while (ast->args[i])
 		{
