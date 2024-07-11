@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:20:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:38:44 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 20:23:32 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,16 @@ int	count_single_quotes(char *str)
 		i++;
 	}
 	return (count);
+}
+
+char	*transform_variable(char *line, t_ast *ast)
+{
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	tmp = line;
+	line = transform_argiables(line, &i, &ast);
+	free(tmp);
+	return (line);
 }

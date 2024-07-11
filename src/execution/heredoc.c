@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:39:23 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 19:19:31 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:23:25 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,17 @@ int	open_heredoc_buffer(int *fd2, int flag)
 	return (0);
 }
 
-void	read_and_write_heredoc(int fd2, t_ast *ast)
+int	read_and_write_heredoc(int fd2, t_ast *ast)
 {
 	char	*line;
 
 	while (1)
 	{
 		line = readline("> ");
+		if (ft_strchr(line, '$'))
+			line = transform_variable(line, ast);
+		if (!line)
+			return (ft_printf("heredoc failed", 1));
 		if (ft_strlen(line) == ft_strlen(ast->heredoc)
 			&& ft_strncmp(line, ast->heredoc, ft_strlen(ast->heredoc)) == 0)
 		{
@@ -58,6 +62,7 @@ void	read_and_write_heredoc(int fd2, t_ast *ast)
 				free(line);
 		}
 	}
+	return (0);
 }
 
 int	set_heredoc_fd(int *fd)
@@ -82,7 +87,8 @@ int	heredoc(int *fd, t_ast *ast, int flag)
 	ft_sigmode_heredoc();
 	if (open_heredoc_buffer(&fd2, flag))
 		return (1);
-	read_and_write_heredoc(fd2, ast);
+	if (read_and_write_heredoc(fd2, ast))
+		return (1);
 	close(fd2);
 	if (set_heredoc_fd(fd))
 		return (1);

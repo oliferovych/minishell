@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 19:20:29 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:23:43 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int				add_token(t_token **lst, t_token_type type,
 char			*process_value(char *input, int *i);
 int				compare_quotes(int *quotes, char *val, int *remove);
 int				count_single_quotes(char *str);
+char			*transform_argiables(char *str, int *i, t_ast **node);
+char			*transform_variable(char *line, t_ast *ast);
 
 //EXECUTION
 int				evaluate_ast(t_ast *ast, int flag);
