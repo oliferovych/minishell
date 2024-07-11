@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:04:38 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/10 16:50:52 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/11 14:09:46 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,12 @@ t_ast	*parse(t_token **token, t_data *old_data)
 	data->token = *token;
 	data->env = old_data->env;
 	data->exp = old_data->exp;
-  data->exit_code = old_data->exit_code;
+	data->exit_code = old_data->exit_code;
 	if (!(*token))
 		return (NULL);
 	node = expr(3, token, data);
 	if (!node)
 	{
-		write(1, "\naa\n", 4);
 		return (free(data), NULL);
 	}
 	return (free(data), node);

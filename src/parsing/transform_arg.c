@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   transform_arg.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/10 17:14:18 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/11 14:12:07 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	count_single_quotes(char *str)
 {
-	int i;
-	int count;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -56,9 +56,16 @@ char	*transform_argiables(char *str, int *i, t_ast **node)
 
 	(*i)++;
 	j = *i;
-	while (str[*i] && (isalnum(str[*i]) || str[*i] == '?'))
+	while (str[*i] && (isalnum(str[*i]) || str[*i] != '?'))
+	{
 		(*i)++;
-	if (variable_exists2((*node)->ms.env, ft_substr(str, j, *i - j)) != -1)
+	}
+	if (str[*i] == '?')
+	{
+		tmp = ft_itoa((*node)->ms.exit_code);
+		(*i)++;
+	}
+	else if (variable_exists2((*node)->ms.env, ft_substr(str, j, *i - j)) != -1)
 		tmp = strcutoff_front((*node)->ms.env[variable_exists2((*node)->ms.env,
 					ft_substr(str, j, *i - j))], '=');
 	else
