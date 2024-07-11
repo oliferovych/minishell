@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   evaluate_ast.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:34:47 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:42:22 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 21:16:46 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	restore_std(int std_in, int std_out)
 	dup2(std_out, STDOUT_FILENO);
 	close(std_in);
 	close(std_out);
-	if (access("heredoc_buffer", F_OK) != -1)
-		unlink("heredoc_buffer");
+	if (access(".heredoc_buffer", F_OK) != -1)
+		unlink(".heredoc_buffer");
 }
 
 int	evaluate_ast(t_ast *ast, int flag)
@@ -47,7 +47,7 @@ int	evaluate_ast(t_ast *ast, int flag)
 	else if (ast->type == N_LESS || ast->type == N_GREAT
 		|| ast->type == N_DGREAT || ast->type == N_DLESS)
 	{
-		if (redirect(ast) == 0)
+		if (redirect(ast, 0) == 0)
 			evaluate_ast(ast->left, 0);
 	}
 	else if (ast->type == N_COMMAND)

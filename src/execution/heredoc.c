@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:39:23 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:42:53 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 21:15:53 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,29 @@ int	reset_stdin_to_tty(void)
 	return (0);
 }
 
-int	open_heredoc_buffer(int *fd2)
+int	open_heredoc_buffer(int *fd2, int flag)
 {
-	*fd2 = open("heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC
-			| O_APPEND, 0644);
+	if (flag)
+		*fd2 = open(".heredoc_buffer", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		*fd2 = open(".heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC
+				| O_APPEND, 0644);
 	if (*fd2 < 0)
 		return (ft_error(ft_get_ast(), "redirect failed"));
 	return (0);
 }
 
-void	read_and_write_heredoc(int fd2, t_ast *ast)
+int	read_and_write_heredoc(int fd2, t_ast *ast)
 {
 	char	*line;
 
 	while (1)
 	{
 		line = readline("> ");
+		if (ft_strchr(line, '$'))
+			line = transform_variable(line, ast);
+		if (!line)
+			return (ft_error(ast, "redirect failed"));
 		if (ft_strlen(line) == ft_strlen(ast->heredoc)
 			&& ft_strncmp(line, ast->heredoc, ft_strlen(ast->heredoc)) == 0)
 		{
@@ -55,11 +62,12 @@ void	read_and_write_heredoc(int fd2, t_ast *ast)
 				free(line);
 		}
 	}
+	return (0);
 }
 
 int	set_heredoc_fd(int *fd)
 {
-	*fd = open("heredoc_buffer", O_RDONLY);
+	*fd = open(".heredoc_buffer", O_RDONLY);
 	if (*fd < 0)
 		return (ft_error(ft_get_ast(), "redirect failed"));
 	if (dup2(*fd, STDIN_FILENO) < 0)
@@ -70,19 +78,20 @@ int	set_heredoc_fd(int *fd)
 	return (0);
 }
 
-int	heredoc(int *fd, t_ast *ast)
+int	heredoc(int *fd, t_ast *ast, int flag)
 {
 	int	fd2;
 
 	if (reset_stdin_to_tty())
 		return (1);
-	ft_sigmode_heredoc();
-	if (open_heredoc_buffer(&fd2))
+	if (open_heredoc_buffer(&fd2, flag))
 		return (1);
-	read_and_write_heredoc(fd2, ast);
+	ft_sigmode_heredoc();
+	if (read_and_write_heredoc(fd2, ast))
+		return (ft_sigmode_shell(), 1);
 	close(fd2);
 	if (set_heredoc_fd(fd))
-		return (1);
+		return (ft_sigmode_shell(), 1);
 	ft_sigmode_shell();
 	return (0);
 }

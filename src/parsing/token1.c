@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:28:17 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:36:59 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 21:10:36 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	match_token_help(char *input, int *i)
 	while (ft_isspace(input[*i]) && input[*i])
 		(*i)++;
 	if (!input[*i])
-		return (0);
+		return (2);
 	if (((input[*i] == '>' || input[*i] == '<')
 			&& (input[*i + 2] == '>' || input[*i + 2] == '<'))
 		|| (input[*i] == '>' && input[*i + 1] == '<')
@@ -79,7 +79,7 @@ int	match_token(char *input, int *i, t_token **lst)
 	int	res;
 
 	res = match_token_help(input, i);
-	if (res)
+	if (res || res == 2)
 		return (res);
 	if (input[*i] == '|' && input[*i + 1] != '|')
 		return (add_token(lst, T_PIPE, input, i));

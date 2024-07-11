@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:36:08 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:43:35 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 20:44:29 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	handle_redirection(t_ast *ast)
 	if (ast->left->type == N_LESS || ast->left->type == N_DLESS
 		|| ast->left->type == N_GREAT || ast->left->type == N_DGREAT)
 	{
-		if (redirect(ast->left) != 0)
-			return (ft_printf("piping failed\n"), 1);
+		if (redirect(ast->left, 0) != 0)
+			return (ft_error(ast, "piping failed"));
 	}
 	return (0);
 }
@@ -27,7 +27,7 @@ int	create_child_process(pid_t *pid)
 {
 	*pid = fork();
 	if (*pid == -1)
-		return (ft_printf("piping failed\n"), 1);
+		return (ft_error(ft_get_ast(), "piping failed"));
 	return (0);
 }
 
@@ -59,7 +59,7 @@ int	pipe_execution(t_ast *ast)
 	pid_t	pid2;
 
 	if (pipe(pipefd) == -1)
-		return (ft_printf("piping failed\n"), 1);
+		return (ft_error(ast, "piping failed"));
 	if (handle_redirection(ast))
 		return (1);
 	if (create_child_process(&pid1))
@@ -73,6 +73,6 @@ int	pipe_execution(t_ast *ast)
 	close(pipefd[0]);
 	close(pipefd[1]);
 	if (waitpid(pid1, NULL, 0) == -1 || waitpid(pid2, NULL, 0) == -1)
-		return (ft_printf("piping failed\n"), 1);
+		return (ft_error(ast, "piping failed"));
 	return (0);
 }
