@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 13:45:23 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:38:52 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ void			handle_r(t_token **token, t_data *data,
 void			handle_c(t_token **token, t_data *data,
 					t_ast **node, t_ast **prev_redi);
 int				is_redirection(t_token_type type);
+void			link_redir_nodes(t_ast **redir_node, t_ast **command_node);
+int				add_token(t_token **lst, t_token_type type,
+					char *input, int *i);
+char			*process_value(char *input, int *i);
+int				compare_quotes(int *quotes, char *val, int *remove);
+int				count_single_quotes(char *str);
 
 //EXECUTION
 int				evaluate_ast(t_ast *ast, int flag);

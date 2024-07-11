@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   other.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 17:09:47 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 17:09:49 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/11 14:44:27 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char *ft_strstr2(char **haystack, char *needle)
+char	*ft_strstr2(char **haystack, char *needle)
 {
-	int i;
-	char *res;
+	int		i;
+	char	*res;
 
 	i = 0;
 	while (haystack[i])
@@ -31,7 +31,8 @@ char *ft_strstr2(char **haystack, char *needle)
 int	check_filename(t_ast *ast)
 {
 	if ((ast->filename[0] == '$' && ast->filename[1] && ast->tran[0][0] == 1)
-		|| (ft_strchr(ast->filename, ' ') != NULL && ft_strstr2(ast->ms.env, ast->filename) != NULL))
+		|| (ft_strchr(ast->filename, ' ') != NULL
+		&& ft_strstr2(ast->ms.env, ast->filename) != NULL))
 		return (1);
 	return (0);
 }

@@ -6,27 +6,11 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:12:07 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:38:39 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	count_single_quotes(char *str)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'')
-			count++;
-		i++;
-	}
-	return (count);
-}
 
 char	*transform_arg_single_quote(char *str, int *i, int k, t_ast **node)
 {

@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:04:29 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 13:49:38 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:20:45 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,21 +71,6 @@ int	handle_redir(t_token **token, t_ast **node, t_data *data, int arg_count)
 		*token = (*token)->next;
 	}
 	return (arg_count);
-}
-
-void	link_redir_nodes(t_ast **redir_node, t_ast **command_node)
-{
-	t_ast	*last_redir_node;
-
-	last_redir_node = NULL;
-	if (*redir_node)
-	{
-		last_redir_node = *redir_node;
-		while (last_redir_node->left)
-			last_redir_node = last_redir_node->left;
-		last_redir_node->left = *command_node;
-		*command_node = *redir_node;
-	}
 }
 
 char	*create_command_node(t_token **token, t_ast **node, t_data *data)
