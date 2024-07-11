@@ -42,10 +42,11 @@ void			handle_r(t_token **token, t_data *data,
 					t_ast **node, t_ast **prev_node);
 void			handle_c(t_token **token, t_data *data,
 					t_ast **node, t_ast **prev_redi);
+int				is_redirection(t_token_type type);
 
 //EXECUTION
-void			evaluate_ast(t_ast *ast);
-void			command_execute(t_ast *ast);
+int				evaluate_ast(t_ast *ast, int flag);
+int				command_execute(t_ast *ast);
 int				command_is_builtin(char **args);
 void			ft_execute_builtin(t_ast *ast, int builtin);
 void			ft_execvp(t_ast *ast);

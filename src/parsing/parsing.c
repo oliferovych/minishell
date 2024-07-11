@@ -93,21 +93,19 @@ t_ast	*parse(t_token **token, t_data *old_data)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (NULL);
-	else
-	{
-		data->prompt = old_data->prompt;
-		data->input = old_data->input;
-		data->token = *token;
-		data->env = old_data->env;
-		data->exp = old_data->exp;
-		data->exit_code = old_data->exit_code;
-		node = expr(3, token, data);
-	}
+	data->prompt = old_data->prompt;
+	data->input = old_data->input;
+	data->token = *token;
+	data->env = old_data->env;
+	data->exp = old_data->exp;
+  data->exit_code = old_data->exit_code;
+	if (!(*token))
+		return (NULL);
+	node = expr(3, token, data);
 	if (!node)
 	{
 		write(1, "\naa\n", 4);
 		return (free(data), NULL);
 	}
-	free(data);
-	return (node);
+	return (free(data), node);
 }
