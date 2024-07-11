@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:39:23 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:42:53 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 19:19:31 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ int	reset_stdin_to_tty(void)
 	return (0);
 }
 
-int	open_heredoc_buffer(int *fd2)
+int	open_heredoc_buffer(int *fd2, int flag)
 {
-	*fd2 = open("heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC
-			| O_APPEND, 0644);
+	if (flag)
+		*fd2 = open("heredoc_buffer", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		*fd2 = open("heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC
+				| O_APPEND, 0644);
 	if (*fd2 < 0)
 		return (ft_error(ft_get_ast(), "redirect failed"));
 	return (0);
@@ -70,14 +73,14 @@ int	set_heredoc_fd(int *fd)
 	return (0);
 }
 
-int	heredoc(int *fd, t_ast *ast)
+int	heredoc(int *fd, t_ast *ast, int flag)
 {
 	int	fd2;
 
 	if (reset_stdin_to_tty())
 		return (1);
 	ft_sigmode_heredoc();
-	if (open_heredoc_buffer(&fd2))
+	if (open_heredoc_buffer(&fd2, flag))
 		return (1);
 	read_and_write_heredoc(fd2, ast);
 	close(fd2);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:38:52 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:37:20 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/11 19:18:08 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	append(int *fd, t_ast *ast)
 	return (0);
 }
 
-int	redirect(t_ast *ast)
+int	redirect(t_ast *ast, int flag)
 {
 	int	fd;
 
@@ -74,7 +74,7 @@ int	redirect(t_ast *ast)
 	}
 	else if (ast->type == N_DLESS)
 	{
-		if (heredoc(&fd, ast))
+		if (heredoc(&fd, ast, flag))
 			return (1);
 	}
 	else if (ast->type == N_GREAT && out(&fd, ast))
