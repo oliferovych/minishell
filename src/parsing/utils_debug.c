@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:32 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 11:07:33 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 13:56:07 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	print_token(t_token *token)
 	{
 		printf("\n");
 		printf("token %d, type:%s		value: %s", i,
-					token_type_to_string(head->type), head->value);
+		token_type_to_string(head->type), head->value);
 		i++;
 		head = head->next;
 	}

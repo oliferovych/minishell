@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 00:38:59 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:06:22 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_ast	*ast;
 	t_token	*token;
-	// t_token	*tmp;
+	t_token	*tmp;
 	t_data	*data;
 
 	(void)argc;
@@ -78,16 +78,16 @@ int	main(int argc, char **argv, char **envp)
 		ast = NULL;
 		get_input(data);
 		token = get_token(data->input, data->prompt);
-		// tmp = token;
-		// print_token(tmp);
+		tmp = token;
+		print_token(tmp);
 		ast = parse(&token, data);
-		// printf("\n\n");
-		// print_ast(ast);
+		printf("\n\n");
+		print_ast(ast);
 		if (!evaluate_ast(ast, 1))
 		{
 			data->env = ast->ms.env;
 			data->exp = ast->ms.exp;
-      data->exit_code = ast->ms.exit_code;
+			data->exit_code = ast->ms.exit_code;
 		}
 		free_all(ast, 0);
 	}

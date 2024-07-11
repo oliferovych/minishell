@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_node.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:24 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 23:29:54 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/11 13:51:42 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char *add_quotes(char *str)
+char	*add_quotes(char *str)
 {
-	char *res;
-	int i;
-	int j;
+	char	*res;
+	int		i;
+	int		j;
 
 	j = 1;
 	i = 0;
@@ -61,9 +61,10 @@ char	*create_redir_node(t_token **token, t_ast **redir_node)
 	return ("c");
 }
 
-int is_redirection(t_token_type type)
+int	is_redirection(t_token_type type)
 {
-	if (type == T_LESS || type == T_GREAT || type == T_DGREAT || type == T_DLESS)
+	if (type == T_LESS || type == T_GREAT
+		|| type == T_DGREAT || type == T_DLESS)
 		return (1);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:14 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/10 19:53:17 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/11 13:54:51 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,29 +33,29 @@ t_token	*ft_new_token(char *value, t_token_type type)
 	return (new_token);
 }
 
-int get_delimiters(int *quotes, char *delimiters, int *remove)
+int	get_delimiters(int *quotes, char *delimiters, int *remove)
 {
 	if (quotes[0] % 2 == 0 && quotes[1] % 2 == 0)
 		return (0);
-    if (quotes[0] % 2 == 0)
-    {
-        delimiters[0] = '\'';
-        delimiters[1] = '\"';
+	if (quotes[0] % 2 == 0)
+	{
+		delimiters[0] = '\'';
+		delimiters[1] = '\"';
 		*remove = 0;
-    }
-    else
-    {
-        delimiters[0] = '\"';
-        delimiters[1] = '\'';
-    }
+	}
+	else
+	{
+		delimiters[0] = '\"';
+		delimiters[1] = '\'';
+	}
 	return (1);
 }
 
 int	compare_quotes(int *quotes, char *val, int *remove)
 {
-	int i;
-	char delimiters[2];
-	int open_quotes;
+	int		i;
+	char	delimiters[2];
+	int		open_quotes;
 
 	if (!get_delimiters(quotes, delimiters, remove))
 		return (0);
@@ -80,13 +80,10 @@ int	compare_quotes(int *quotes, char *val, int *remove)
 	return (1);
 }
 
-
-
-
-char *check_quotes(char *val, int *quote, int remove)
+char	*check_quotes(char *val, int *quote, int remove)
 {
-	char *tmp;
-	int comp_res;
+	char	*tmp;
+	int		comp_res;
 
 	comp_res = compare_quotes(quote, val, &remove);
 	if ((ft_strstr(val, "=\"") && quote[1] % 2 == 0)
@@ -111,7 +108,7 @@ char *check_quotes(char *val, int *quote, int remove)
 	return (val);
 }
 
-char *check_value(char *val, int *quote)
+char	*check_value(char *val, int *quote)
 {
 	if (!val)
 		return (error_indicator(1, "substr"), NULL);
@@ -119,48 +116,53 @@ char *check_value(char *val, int *quote)
 	return (val);
 }
 
-void handle_double_quote(char **str, int *i)
+void	handle_double_quote(char **str, int *i)
 {
-    char *res;
-    int j = 0;
-    int k = 0;
+	char	*res;
+	int		j;
+	int		k;
 
-	res = malloc(strlen(*str) + 3);	
-    while ((*str)[k] && k < *i)
-        res[j++] = (*str)[k++];
-    res[j++] = '\'';
-    res[j++] = '\'';
-    while ((*str)[k])
-        res[j++] = (*str)[k++];
-    res[j] = '\0';
-    *i = k;
-    free(*str);
-    *str = res;
+	k = 0;
+	j = 0;
+	res = malloc(strlen(*str) + 3);
+	while ((*str)[k] && k < *i)
+		res[j++] = (*str)[k++];
+	res[j++] = '\'';
+	res[j++] = '\'';
+	while ((*str)[k])
+		res[j++] = (*str)[k++];
+	res[j] = '\0';
+	*i = k;
+	free(*str);
+	*str = res;
 }
 
-char *handle_quotes(char *str)
+char	*handle_quotes(char *str)
 {
-    int i = 0;
-    int quotes = 0;
-    while (str[i])
-    {
-        if (str[i] == '$')
-        {
-            while (str[i])
-            {
-                if (quotes == 2)
-                    return str;
-                if (str[i] == '\"' && (str[i + 1]) && str[i + 1] != '$')
-                {
-                    handle_double_quote(&str, &i);
+	int	i;
+	int	quotes;
+
+	quotes = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			while (str[i])
+			{
+				if (quotes == 2)
+					return (str);
+				if (str[i] == '\"' && (str[i + 1]) && str[i + 1] != '$')
+				{
+					handle_double_quote(&str, &i);
 					quotes++;
-                }
-                i++;
-            }
-        }
-        i++;
-    }
-    return str;
+				}
+				i++;
+			}
+		}
+		i++;
+	}
+	return (str);
 }
 
 char	*process_value(char *input, int *i)
@@ -169,7 +171,7 @@ char	*process_value(char *input, int *i)
 	int		j;
 	int		quote[2];
 	int		count;
-	
+
 	j = *i;
 	count = 0;
 	quote[0] = 0;
@@ -195,12 +197,14 @@ int	add_token(t_token **lst, t_token_type type, char *input, int *i)
 	t_token	*new;
 	char	*value;
 
-	if (type == T_OPAR || type == T_CPAR || type == T_PIPE || type == T_GREAT || type == T_LESS)
+	if (type == T_OPAR || type == T_CPAR
+		|| type == T_PIPE || type == T_GREAT || type == T_LESS)
 	{
 		value = ft_substr(input, *i, 1);
 		(*i)++;
 	}
-	else if (type == T_DGREAT || type == T_DLESS || type == T_OR || type == T_AND)
+	else if (type == T_DGREAT || type == T_DLESS
+		|| type == T_OR || type == T_AND)
 	{
 		value = ft_substr(input, *i, 2);
 		(*i) += 2;
@@ -217,24 +221,24 @@ int	add_token(t_token **lst, t_token_type type, char *input, int *i)
 	return (0);
 }
 
-int match_token_help(char *input, int *i)
+int	match_token_help(char *input, int *i)
 {
 	while (ft_isspace(input[*i]) && input[*i])
 		(*i)++;
 	if (!input[*i])
 		return (0);
 	if (((input[*i] == '>' || input[*i] == '<')
-		&& (input[*i + 2] == '>' || input[*i + 2] == '<'))
+			&& (input[*i + 2] == '>' || input[*i + 2] == '<'))
 		|| (input[*i] == '>' && input[*i + 1] == '<')
 		|| (input[*i] == '<' && input[*i + 1] == '>'))
 		return (ft_printf("syntax error near unexpected token '%c'\n",
-			input[*i]), 1);
+				input[*i]), 1);
 	return (0);
 }
 
 int	match_token(char *input, int *i, t_token **lst)
 {
-	int res;
+	int	res;
 
 	res = match_token_help(input, i);
 	if (res)

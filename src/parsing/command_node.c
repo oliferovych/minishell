@@ -3,40 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   command_node.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:04:29 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 23:19:14 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/11 13:49:38 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void fill_args(t_token *curr_token, t_ast **node, int a_count, int i)
+void	fill_args(t_token *curr_token, t_ast **node, int a_count, int i)
 {
-    while (curr_token && curr_token->type == T_IDENTIFIER)
-    {
-        (*node)->args[i] = transform_arg(node, curr_token, i);
-        if (!(*node)->args[i++])
-            return;
-        curr_token = curr_token->next;
-    }
-    while (curr_token && is_redirection(curr_token->type))
-    {
-        curr_token = curr_token->next;
-        if (curr_token && curr_token->type == T_IDENTIFIER)
-            curr_token = curr_token->next;
-    }
-    while (curr_token && curr_token->type == T_IDENTIFIER)
-    {
-        (*node)->args[i] = transform_arg(node, curr_token, i);
-        if (!(*node)->args[i++])
-            return;
-        curr_token = curr_token->next;
-    }
-    (*node)->args[a_count] = NULL;
+	while (curr_token && curr_token->type == T_IDENTIFIER)
+	{
+		(*node)->args[i] = transform_arg(node, curr_token, i);
+		if (!(*node)->args[i++])
+			return ;
+		curr_token = curr_token->next;
+	}
+	while (curr_token && is_redirection(curr_token->type))
+	{
+		curr_token = curr_token->next;
+		if (curr_token && curr_token->type == T_IDENTIFIER)
+			curr_token = curr_token->next;
+	}
+	while (curr_token && curr_token->type == T_IDENTIFIER)
+	{
+		(*node)->args[i] = transform_arg(node, curr_token, i);
+		if (!(*node)->args[i++])
+			return ;
+		curr_token = curr_token->next;
+	}
+	(*node)->args[a_count] = NULL;
 }
-
 
 char	*allocate_command_memory(t_ast **node, int arg_count)
 {
@@ -62,7 +61,7 @@ int	count_args(t_token **curr_token)
 
 int	handle_redir(t_token **token, t_ast **node, t_data *data, int arg_count)
 {
-	t_ast *prev_node;
+	t_ast	*prev_node;
 
 	prev_node = NULL;
 	handle_r(token, data, node, &prev_node);
@@ -74,21 +73,20 @@ int	handle_redir(t_token **token, t_ast **node, t_data *data, int arg_count)
 	return (arg_count);
 }
 
-void link_redir_nodes(t_ast **redir_node, t_ast **command_node)
+void	link_redir_nodes(t_ast **redir_node, t_ast **command_node)
 {
-    t_ast *last_redir_node;
+	t_ast	*last_redir_node;
 
 	last_redir_node = NULL;
 	if (*redir_node)
-    {
-        last_redir_node = *redir_node;
-        while (last_redir_node->left)
-            last_redir_node = last_redir_node->left;
-        last_redir_node->left = *command_node;
-        *command_node = *redir_node;
-    }
+	{
+		last_redir_node = *redir_node;
+		while (last_redir_node->left)
+			last_redir_node = last_redir_node->left;
+		last_redir_node->left = *command_node;
+		*command_node = *redir_node;
+	}
 }
-
 
 char	*create_command_node(t_token **token, t_ast **node, t_data *data)
 {
