@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:53:39 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 14:45:09 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/11 21:25:24 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 
 void	ft_echo(t_ast *ast)
 {
-    int i;
-    int flag;
-    i = 1;
-    flag = 0;
-    if (ast->args[i] && ft_strnstr(ast->args[i], "-n", 2) != NULL)
-    {
-        flag++;
-        i++;
-    }
+	int	i;
+	int	flag;
+
+	i = 1;
+	flag = 0;
+	if (ast->args[i] && ft_strnstr(ast->args[i], "-n", 2) != NULL)
+	{
+		flag++;
+		i++;
+	}
 	if (ast->args[i])
 	{
 		while (ast->args[i])
