@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 00:38:59 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/11 00:38:59 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static t_data	*data_init(char **envp)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		exit(EXIT_FAILURE);
+	data->exit_code = 0;
 	data->env = env_init(envp);
 	if (!data->env)
 	{
@@ -68,6 +69,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	// atexit(leaks);
 	ft_initialize_signals();
 	data = data_init(envp);
 	ast = ft_get_ast();
@@ -85,6 +87,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			data->env = ast->ms.env;
 			data->exp = ast->ms.exp;
+      data->exit_code = ast->ms.exit_code;
 		}
 		free_all(ast, 0);
 	}

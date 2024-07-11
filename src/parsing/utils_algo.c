@@ -30,6 +30,7 @@ t_ast	*create_ast_node(t_node_type type, t_data *data)
 		node->ms.prompt = data->prompt;
 		node->ms.env = data->env;
 		node->ms.exp = data->exp;
+		node->ms.exit_code = data->exit_code;
 	}
 	else
 		return (NULL);

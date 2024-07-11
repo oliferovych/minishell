@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 00:34:17 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:34:03 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int				command_execute(t_ast *ast);
 int				command_is_builtin(char **args);
 void			ft_execute_builtin(t_ast *ast, int builtin);
 void			ft_execvp(t_ast *ast);
-void			ft_errorcode_exit(char *command, int code);
+void			ft_errorcode_exit(char *command, char *path);
+int				get_status(int status);
 
 //ENVIRONMENT
 char			**env_init(char **input_env);
@@ -93,6 +94,8 @@ void			bubble_sort(char **array, int size);
 t_ast			*ft_get_ast(void);
 char			*remove_char(const char *str, char char_to_remove);
 void			free_double_array_char(char **array);
+void			free_command(t_ast *node, int i);
+int				check_string(const char *str);
 
 //WILDCARDS
 char			*handle_wildcards(char *str);

@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 18:15:46 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/17 17:01:07 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:49:16 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,15 @@ void	ft_change_existing(char *var, char **env)
 	env[i] = ft_strdup(var);
 }
 
+static void	add_export(t_ast *ast, char *exp)
+{
+	if (variable_exists(ast->ms.exp, exp) == -1)
+		ft_add_var(exp, &ast->ms.exp);
+	else
+		ft_change_existing(exp, ast->ms.exp);
+	free(exp);
+}
+
 void	ft_exp(t_ast *ast)
 {
 	int		i;
@@ -60,6 +69,8 @@ void	ft_exp(t_ast *ast)
 		i = 1;
 		while (ast->args[i] != NULL)
 		{
+			if (!check_string(ast->args[i]))
+				return ((void)(ast->ms.exit_code = 1));
 			if (ft_strchr(ast->args[i], '='))
 			{
 				if (variable_exists(ast->ms.env, ast->args[i]) == -1)
@@ -68,11 +79,7 @@ void	ft_exp(t_ast *ast)
 					ft_change_existing(ast->args[i], ast->ms.env);
 			}
 			exp = export_line(ast->args[i]);
-			if (variable_exists(ast->ms.exp, exp) == -1)
-				ft_add_var(exp, &ast->ms.exp);
-			else
-				ft_change_existing(exp, ast->ms.exp);
-			free(exp);
+			add_export(ast, exp);
 			i++;
 		}
 	}

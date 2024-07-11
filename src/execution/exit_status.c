@@ -1,39 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   exit_status.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/06 18:53:39 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 17:02:14 by dolifero         ###   ########.fr       */
+/*   Created: 2024/07/10 16:34:00 by dolifero          #+#    #+#             */
+/*   Updated: 2024/07/10 16:35:43 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_echo(t_ast *ast)
+int	get_status(int status)
 {
-    int i;
-    int flag;
-    i = 1;
-    flag = 0;
-    if (ast->args[i] && ft_strnstr(ast->args[i], "-n", 2) != NULL)
-    {
-        flag++;
-        i++;
-    }
-	else if (ast->args[i])
+	if (WIFSIGNALED(status) && status == SIGTERM)
 	{
-		while(ast->args[i])
-		{
-			if (!(ast->args[i][0] == '$' && ast->args[i][1]) || ast->tran[i][0] == 0)
-				ft_printf("%s", ast->args[i]);
-			if (ast->args[i + 1])
-				ft_printf(" ");
-			i++;
-		}
+		ft_putstr_fd("Terminated: ", STDERR_FILENO);
+		ft_putnbr_fd(WTERMSIG(status), STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
+		return (128 + WTERMSIG(status));
 	}
-	if (flag == 0)
-		ft_printf("\n");
+	return (WEXITSTATUS(status));
 }

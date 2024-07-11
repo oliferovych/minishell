@@ -43,4 +43,3 @@ void	ft_initialize_signals(void)
 	rl_catch_signals = 0;
 	ft_sigmode_shell();
 }
-
