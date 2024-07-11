@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 18:09:27 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 00:34:00 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/11 12:16:26 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,93 +102,125 @@ int and_or_execution(t_ast *ast)
 	return (0);
 }
 
+int in(int *fd, t_ast *ast)
+{
+	int res;
+	*fd = open(ast->filename, O_RDONLY);
+	if (fd < 0)
+		return(ft_printf("redirect failed\n"), 1);
+	res = dup2(*fd, STDIN_FILENO);
+	if (res < 0)
+	{
+		close(*fd);
+		return (ft_printf("redirect failed\n"), 1);
+	}
+	return (0);
+}
+
+int heredoc(int *fd, t_ast *ast)
+{
+	char *line;
+	int reset_stdin;
+	int res;
+	int fd2;
+
+	reset_stdin = open("/dev/tty", O_RDONLY);
+	if (reset_stdin < 0)
+		return (ft_printf("redirect failed\n"), 1);
+	dup2(reset_stdin, STDIN_FILENO);
+	close(reset_stdin);
+	ft_sigmode_heredoc();
+	fd2 = open("heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
+	if (fd2 < 0)
+		return (ft_printf("redirect failed\n"), 1);
+	while (1)
+	{
+		line = readline("> ");
+		if (ft_strlen(line) == ft_strlen(ast->heredoc) &&
+			ft_strncmp(line, ast->heredoc, ft_strlen(ast->heredoc)) == 0)
+		{
+			if (line)
+				free(line);
+			break;
+		}
+		else
+		{
+			write(fd2, line, ft_strlen(line));
+			write(fd2, "\n", 1);
+			if (line)
+				free(line);
+		}
+	}
+	close(fd2);
+	*fd = open("heredoc_buffer", O_RDONLY);
+	if (*fd < 0)
+		return (ft_printf("redirect failed\n"), 1);
+	res = dup2(*fd, STDIN_FILENO);
+	if (res < 0)
+	{
+		close(*fd);
+		return (ft_printf("redirect failed\n"), 1);
+	}
+	ft_sigmode_shell();
+	return (0);
+}
+
+int out(int *fd, t_ast *ast)
+{
+	int res;
+
+	*fd = open(ast->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (*fd < 0)
+		return (ft_printf("redirect failed\n"), 1);
+	res = dup2(*fd, STDOUT_FILENO);
+	if (res < 0)
+	{
+		close(*fd);
+		return (ft_printf("redirect failed\n"), 1);
+	}
+	return (0);
+}
+
+int append(int *fd, t_ast *ast)
+{
+	int res;
+
+	*fd = open(ast->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (*fd < 0)
+		return (ft_printf("redirect failed\n"), 1);
+
+	res = dup2(*fd, STDOUT_FILENO);
+	if (res < 0)
+	{
+		close(*fd);
+		return (ft_printf("redirect failed\n"), 1);
+	}
+	return (0);
+}
+
 int redirect(t_ast *ast)
 {
 	int fd;
-	int fd2;
-	int res;
-	char *line;
-	int reset_stdin;
 
+	fd = -1;
 	if (ast->filename && check_filename(ast))
 		return (ft_printf("%s: ambiguous redirect\n", ast->filename));
 	if (ast->type == N_LESS)
 	{
-		fd = open(ast->filename, O_RDONLY);
-		if (fd < 0)
-			return(ft_printf("redirect failed\n"), 1);
-		res = dup2(fd, STDIN_FILENO);
-		if (res < 0)
-		{
-			close(fd);
-			return (ft_printf("redirect failed\n"), 1);
-		}
+		if (in(&fd, ast))
+			return (1);
 	}
 	else if (ast->type == N_DLESS)
 	{
-		reset_stdin = open("/dev/tty", O_RDONLY);
-        if (reset_stdin < 0)
-			return (ft_printf("redirect failed\n"), 1);
-        dup2(reset_stdin, STDIN_FILENO);
-        close(reset_stdin);
-		ft_sigmode_heredoc();
-		fd2 = open("heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
-		if (fd2 < 0)
-			return (ft_printf("redirect failed\n"), 1);
-		while (1)
-		{
-			line = readline("> ");
-			if (ft_strlen(line) == ft_strlen(ast->heredoc) &&
-            	ft_strncmp(line, ast->heredoc, ft_strlen(ast->heredoc)) == 0)
-			{
-				if (line)
-					free(line);
-				break;
-			}
-			else
-			{
-				write(fd2, line, ft_strlen(line));
-				write(fd2, "\n", 1);
-				if (line)
-					free(line);
-			}
-		}
-		close(fd2);
-		fd = open("heredoc_buffer", O_RDONLY);
-		if (fd < 0)
-			return (ft_printf("redirect failed\n"), 1);
-		res = dup2(fd, STDIN_FILENO);
-		if (res < 0)
-		{
-			close(fd);
-			return (ft_printf("redirect failed\n"), 1);
-		}
-		ft_sigmode_shell();
+		if (heredoc(&fd, ast))
+			return (1);
 	}
-	else if (ast->type == N_GREAT)
-	{
-		fd = open(ast->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd < 0)
-			return (ft_printf("redirect failed\n"), 1);
-		res = dup2(fd, STDOUT_FILENO);
-		if (res < 0)
-		{
-			close(fd);
-			return (ft_printf("redirect failed\n"), 1);
-		}
-	}
+	else if (ast->type == N_GREAT && out(&fd, ast))
+		return (1);
 	else
 	{
-		fd = open(ast->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd < 0)
-			return (ft_printf("redirect failed\n"), 1);
-
-		res = dup2(fd, STDOUT_FILENO);
-		if (res < 0)
-		{
-			close(fd);
-			return (ft_printf("redirect failed\n"), 1);
-		}
+		if (append(&fd, ast))
+			return (1);
 	}
 	if (fd >= 0)
 		close (fd);
