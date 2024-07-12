@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 17:08:26 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 17:09:13 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/12 16:42:51 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	free_redirect(t_ast *node)
 		if (node->heredoc)
 			free(node->heredoc);
 	}
+	free(node->tran[0]);
 	free(node->tran);
 }
 
