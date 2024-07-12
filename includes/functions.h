@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/12 13:08:06 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/12 14:01:52 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char			*ft_strcutoff_front(const char *str, char c);
 void			ft_swap(char **a, char **b);
 void			bubble_sort(char **array, int size);
 t_ast			*ft_get_ast(void);
-char			*remove_char(const char *str, char char_to_remove);
+char			*remove_char(char *str, char char_to_remove);
 void			free_double_array_char(char **array);
 void			free_command(t_ast *node, int i);
 int				check_string(const char *str);

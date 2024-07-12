@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 17:09:47 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/12 13:54:38 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/12 14:01:40 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	check_filename(t_ast *ast)
 	return (0);
 }
 
-char	*remove_char(const char *str, char char_to_remove)
+char	*remove_char(char *str, char char_to_remove)
 {
 	int		new_len;
 	int		i;

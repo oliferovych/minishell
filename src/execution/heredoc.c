@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:39:23 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/12 12:48:25 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/12 14:19:47 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	set_heredoc_fd(int *fd)
 		close(*fd);
 		return (ft_error(ft_get_ast(), "heredoc failed"));
 	}
+	close (*fd);
 	return (0);
 }
 
@@ -88,7 +89,7 @@ int	heredoc(int *fd, t_ast *ast, int flag)
 		return (1);
 	ft_sigmode_heredoc();
 	if (read_and_write_heredoc(fd2, ast))
-		return (ft_sigmode_shell(), 1);
+		return (ft_sigmode_shell(), close(fd2), 1);
 	close(fd2);
 	if (set_heredoc_fd(fd))
 		return (ft_sigmode_shell(), 1);

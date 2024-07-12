@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 14:17:10 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/12 14:20:32 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,14 @@ static void	get_input(t_data *data)
 	data->prompt = get_prompt();
 	data->input = readline(data->prompt);
 	if (!data->input)
-		write(1, "dd\n", 3);
-	if (!data->input)
 	{
-		ft_printf("%sexit\n", data->prompt);
+		ft_printf("readline failed\n");
 		free(data->prompt);
 		free(data->input);
 		free_environment(data->env);
 		free_environment(data->exp);
 		free(data);
-		exit(0);
+		exit(1);
 	}
 	add_history(data->input);
 }
@@ -77,7 +75,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		ast = NULL;
 		get_input(data);
-		token = get_token(data->input, data->prompt);
+		token = get_token(data->input);
 		// tmp = token;
 		// print_token(tmp);
 		ast = parse(&token, data);

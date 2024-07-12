@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:31:47 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/12 13:54:15 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/12 14:00:09 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	handle_quotes(char **str)
 		i++;
 	}
 }
-
 
 char	*process_value(char *input, int *i)
 {

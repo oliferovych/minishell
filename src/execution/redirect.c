@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:38:52 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 19:18:08 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/12 14:18:31 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,9 @@ int	out(int *fd, t_ast *ast)
 	if (*fd < 0)
 		return (ft_error(ast, "redirect failed"));
 	res = dup2(*fd, STDOUT_FILENO);
+	close(*fd);
 	if (res < 0)
-	{
-		close(*fd);
 		return (ft_error(ast, "redirect failed"));
-	}
 	return (0);
 }
 
@@ -33,14 +31,12 @@ int	in(int *fd, t_ast *ast)
 	int	res;
 
 	*fd = open(ast->filename, O_RDONLY);
-	if (fd < 0)
+	if (*fd < 0)
 		return (ft_error(ast, "redirect failed"));
 	res = dup2(*fd, STDIN_FILENO);
+	close(*fd);
 	if (res < 0)
-	{
-		close(*fd);
 		return (ft_error(ast, "redirect failed"));
-	}
 	return (0);
 }
 
@@ -52,11 +48,9 @@ int	append(int *fd, t_ast *ast)
 	if (*fd < 0)
 		return (ft_error(ast, "redirect failed"));
 	res = dup2(*fd, STDOUT_FILENO);
+	close(*fd);
 	if (res < 0)
-	{
-		close(*fd);
 		return (ft_error(ast, "redirect failed"));
-	}
 	return (0);
 }
 
