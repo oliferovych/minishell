@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:38:22 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/14 20:24:39 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/12 12:42:32 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 void	ft_exit(t_ast *ast)
 {
+	int	exitcode;
+
+	ast->ms.exit_code = 0;
 	if (ast->args[1] != NULL)
 	{
 		if (!ft_atoi(ast->args[1]) || ft_strlen(ast->args[1]) == 0)
@@ -28,12 +31,12 @@ void	ft_exit(t_ast *ast)
 			ft_putendl_fd("exit", 2);
 			ft_putendl_fd("minishell: exit: too many arguments", 2);
 			ast->ms.exit_code = 1;
-			return ;
 		}
 		ast->ms.exit_code = ft_atoi(ast->args[1]);
 		ast->ms.exit_code = ast->ms.exit_code % 256;
 	}
+	exitcode = ast->ms.exit_code;
 	ft_putendl_fd("exit", 2);
 	free_all(ast, 1);
-	exit(ast->ms.exit_code);
+	exit(exitcode);
 }

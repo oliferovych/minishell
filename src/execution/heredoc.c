@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:39:23 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 21:15:53 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/12 12:48:25 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	reset_stdin_to_tty(void)
 
 	reset_stdin = open("/dev/tty", O_RDONLY);
 	if (reset_stdin < 0)
-		return (ft_error(ft_get_ast(), "redirect failed"));
+		return (ft_error(ft_get_ast(), "heredoc failed"));
 	dup2(reset_stdin, STDIN_FILENO);
 	close(reset_stdin);
 	return (0);
@@ -32,7 +32,7 @@ int	open_heredoc_buffer(int *fd2, int flag)
 		*fd2 = open(".heredoc_buffer", O_WRONLY | O_CREAT | O_TRUNC
 				| O_APPEND, 0644);
 	if (*fd2 < 0)
-		return (ft_error(ft_get_ast(), "redirect failed"));
+		return (ft_error(ft_get_ast(), "heredoc failed"));
 	return (0);
 }
 
@@ -46,7 +46,7 @@ int	read_and_write_heredoc(int fd2, t_ast *ast)
 		if (ft_strchr(line, '$'))
 			line = transform_variable(line, ast);
 		if (!line)
-			return (ft_error(ast, "redirect failed"));
+			return (ft_error(ast, "heredoc failed"));
 		if (ft_strlen(line) == ft_strlen(ast->heredoc)
 			&& ft_strncmp(line, ast->heredoc, ft_strlen(ast->heredoc)) == 0)
 		{
@@ -69,11 +69,11 @@ int	set_heredoc_fd(int *fd)
 {
 	*fd = open(".heredoc_buffer", O_RDONLY);
 	if (*fd < 0)
-		return (ft_error(ft_get_ast(), "redirect failed"));
+		return (ft_error(ft_get_ast(), "heredoc failed"));
 	if (dup2(*fd, STDIN_FILENO) < 0)
 	{
 		close(*fd);
-		return (ft_error(ft_get_ast(), "redirect failed"));
+		return (ft_error(ft_get_ast(), "heredoc failed"));
 	}
 	return (0);
 }

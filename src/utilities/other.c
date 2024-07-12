@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 17:09:47 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 14:44:27 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/12 13:54:38 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*remove_char(const char *str, char char_to_remove)
 		i++;
 	}
 	new_str[j] = '\0';
-	return (new_str);
+	return (free(str), new_str);
 }
 
 void	free_double_array_char(char **array)

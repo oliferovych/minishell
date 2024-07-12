@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:28:17 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 21:10:36 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/12 13:29:40 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	match_token(char *input, int *i, t_token **lst)
 		return (add_token(lst, T_IDENTIFIER, input, i));
 }
 
-t_token	*get_token(char *input, char *prompt)
+t_token	*get_token(char *input)
 {
 	t_token	*lst;
 	int		i;
@@ -113,12 +113,7 @@ t_token	*get_token(char *input, char *prompt)
 	while (input[i])
 	{
 		if (match_token(input, &i, &lst) == 1)
-		{
-			free(prompt);
-			free(input);
-			free_tokens(lst);
 			return (NULL);
-		}
 	}
 	return (lst);
 }

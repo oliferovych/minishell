@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/11 20:23:43 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/12 13:08:06 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char			*get_prompt(void);
 char			*trim_dir_path(char *dir_path);
 
 //TOKENISING
-t_token			*get_token(char *input, char *prompt);
+t_token			*get_token(char *input);
 void			print_token(t_token *token);
 void			free_tokens(t_token *token);
 int				ft_isspace(int c);
