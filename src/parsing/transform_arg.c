@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 21:03:46 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 00:33:58 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ char	*transform_arg_single_quote(char *str, int *i, int k, t_ast **node)
 	if (count % 2 == 0)
 		(*i)++;
 	j = *i;
-	if (count % 2 != 0)
+	if (count % 2 != 0 || count == 4)
 		(*i)++;
 	while (str[*i] && str[*i] != '\'')
 		(*i)++;
+	if (count == 4)
+	 (*i)++;
 	tmp = ft_substr(str, j, *i - j);
 	if (str[*i])
 		(*i)++;
@@ -40,7 +42,7 @@ char	*transform_argiables(char *str, int *i, t_ast **node)
 
 	(*i)++;
 	j = *i;
-	while (str[*i] && (isalnum(str[*i]) || str[*i] != '?'))
+	while (str[(*i)] && (isalnum(str[(*i) + 1]) || str[*i] != '?'))
 	{
 		(*i)++;
 	}
@@ -96,6 +98,30 @@ char	*transform_arg_sub(t_ast **node, char *str, int k, char *res)
 	return (res);
 }
 
+void	check_for_var(char **res, t_ast **node)
+{
+	char *str;
+	char *tmp;
+
+	str = *res;
+	if (str[0] == '\"' && str[1] == '$' && str[ft_strlen(str) - 1] == '\"' && str[ft_strlen(str) - 2] == '\'')
+	{
+		*res = remove_char(str, '\'');
+		printf("\naft:%sn\n", *res);
+	}
+	if (str[0] == '\'' && str[1] == '$' && str[ft_strlen(str) - 1] == '\'')
+	{
+		int i = 1;
+		printf("\nbef:%s\n", str);
+		tmp = transform_argiables(str, &i, node);
+		free(str);
+		*res = remove_char(tmp, '\'');
+		printf("\nnew:%s\n", tmp);
+		double_single_quotes(&(*res));
+	}
+
+}
+
 char	*transform_arg(t_ast **node, t_token *token, int k)
 {
 	char	*str;
@@ -109,5 +135,7 @@ char	*transform_arg(t_ast **node, t_token *token, int k)
 	if (!(*node)->tran[k] || !res)
 		return (NULL);
 	(*node)->tran[k][0] = 1;
-	return (transform_arg_sub(node, str, k, res));
+	res = transform_arg_sub(node, str, k, res);
+	// check_for_var(&res, node);
+	return (res);
 }
