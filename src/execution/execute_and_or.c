@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:42:18 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 20:45:30 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/13 21:58:49 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	and_or_execution(t_ast *ast)
 		handle_first_child(ast);
 	if (waitpid(pid1, &status, 0) == -1)
 		return (ft_error(ast, "and/or failed"));
+	ast->ms.exit_code = WEXITSTATUS(status);
 	if (WIFEXITED(status) && ((WEXITSTATUS(status) == 0 && ast->type == N_AND)
 			|| (WEXITSTATUS(status) != 0 && ast->type == N_OR)))
 	{
@@ -86,8 +87,9 @@ int	and_or_execution(t_ast *ast)
 			return (ft_error(ast, "and/or failed"));
 		if (pid2 == 0)
 			handle_secound_child(ast);
-		else if (waitpid(pid2, NULL, 0) == -1)
+		else if (waitpid(pid2, &status, 0) == -1)
 			return (ft_error(ast, "and/or failed"));
+		ast->ms.exit_code = WEXITSTATUS(status);
 	}
 	return (0);
 }
