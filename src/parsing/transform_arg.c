@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 00:33:58 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 01:10:18 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*transform_argiables(char *str, int *i, t_ast **node)
 
 	(*i)++;
 	j = *i;
-	while (str[(*i)] && (isalnum(str[(*i) + 1]) || str[*i] != '?'))
+	while (str[(*i)] && (isalnum(str[(*i)]) || str[*i] != '?'))
 	{
 		(*i)++;
 	}
@@ -75,7 +75,6 @@ char	*transform_arg_sub(t_ast **node, char *str, int k, char *res)
 {
 	char	*tmp;
 	int		i;
-
 	i = 0;
 	while (str[i])
 	{
@@ -98,44 +97,48 @@ char	*transform_arg_sub(t_ast **node, char *str, int k, char *res)
 	return (res);
 }
 
-void	check_for_var(char **res, t_ast **node)
+void	check_for_var(char **res, int flag)
 {
 	char *str;
-	char *tmp;
 
 	str = *res;
 	if (str[0] == '\"' && str[1] == '$' && str[ft_strlen(str) - 1] == '\"' && str[ft_strlen(str) - 2] == '\'')
-	{
-		*res = remove_char(str, '\'');
-		printf("\naft:%sn\n", *res);
-	}
-	if (str[0] == '\'' && str[1] == '$' && str[ft_strlen(str) - 1] == '\'')
-	{
-		int i = 1;
-		printf("\nbef:%s\n", str);
-		tmp = transform_argiables(str, &i, node);
-		free(str);
-		*res = remove_char(tmp, '\'');
-		printf("\nnew:%s\n", tmp);
-		double_single_quotes(&(*res));
-	}
+		*res = remove_char(ft_strdup(str), '\'');
+	if (flag)
+		double_single_quotes(res);
+}
 
+char	*set_flag(char *str, int *flag)
+{
+	int count;
+
+	count = count_single_quotes(str);
+	if (count == 4 && str[0] == '\'' && str[1] == '\'' && str[2] == '$' && str[ft_strlen(str) - 1] == '\'' && str[ft_strlen(str) - 2] == '\'')
+	{
+		str = remove_char(ft_strdup(str), '\'');
+		*flag = 1;
+	}
+	else
+		*flag = 0;
+	return (str);
 }
 
 char	*transform_arg(t_ast **node, t_token *token, int k)
 {
 	char	*str;
 	char	*res;
+	int flag;
 
 	str = token->value;
 	if (!str)
 		return (NULL);
+	str = set_flag(str, &flag);
 	res = ft_strdup("");
 	(*node)->tran[k] = malloc(sizeof(int));
 	if (!(*node)->tran[k] || !res)
 		return (NULL);
 	(*node)->tran[k][0] = 1;
 	res = transform_arg_sub(node, str, k, res);
-	// check_for_var(&res, node);
+	check_for_var(&res, flag);
 	return (res);
 }
