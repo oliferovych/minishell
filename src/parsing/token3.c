@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:31:47 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 09:48:20 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 10:43:35 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	check_quotes(char **val, int *quote, int remove)
 	}
 	else if (((quote[0] % 2 != 0 || quote[1] % 2 != 0) && comp_res))
 	{
-		ft_putendl_fd("unexpected EOF while looking for matching quote\n", 2);
+		ft_putendl_fd("unexpected EOF while looking for matching quote", 2);
 		free (*val);
 		*val = NULL;
 	}
@@ -44,7 +44,7 @@ void	check_quotes(char **val, int *quote, int remove)
 char	*check_value(char *val, int *quote)
 {
 	if (!val)
-		return (error_indicator(1, "substr"), NULL);
+		return (NULL);
 	check_quotes(&val, quote, 1);
 	return (val);
 }

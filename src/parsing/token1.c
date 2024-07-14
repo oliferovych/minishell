@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:28:17 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/12 13:29:40 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/14 11:17:17 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,12 @@ int	match_token_help(char *input, int *i)
 			&& (input[*i + 2] == '>' || input[*i + 2] == '<'))
 		|| (input[*i] == '>' && input[*i + 1] == '<')
 		|| (input[*i] == '<' && input[*i + 1] == '>'))
-		return (ft_printf("syntax error near unexpected token '%c'\n",
-				input[*i]), 1);
+		{
+			write(2, "syntax error near unexpected token ", 35);
+			write(2, &input[*i], 1);
+			write(2, "\n", 1);
+			return (1);
+		}
 	return (0);
 }
 

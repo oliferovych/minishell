@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:04:38 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:09:46 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/14 11:36:36 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	get_precedence(t_token_type type)
 		return (3);
 	if (type == T_OPAR || type == T_CPAR)
 		return (4);
-	error_indicator(1, "precedence");
 	return (-1);
 }
 
@@ -36,7 +35,8 @@ t_ast	*nud(t_token **token, t_data *data)
 
 	node = NULL;
 	prev_redir_node = NULL;
-	handle_r(token, data, &node, &prev_redir_node);
+	if (handle_r(token, data, &node, &prev_redir_node))
+		return (NULL);
 	handle_c(token, data, &node, &prev_redir_node);
 	return (node);
 }
@@ -54,7 +54,10 @@ t_ast	*led(t_ast *left, t_token **token, t_data *data)
 		node->left = left;
 		*token = (*token)->next;
 		if (prec == 2)
-			create_redir_node(token, &node);
+		{
+			if (create_redir_node(token, &node) == NULL)
+				return (NULL);
+		}
 		else
 		{
 			node->right = expr(prec, token, data);

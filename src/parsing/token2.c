@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:14 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/12 13:31:07 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/14 11:17:29 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ t_token	*ft_new_token(char *value, t_token_type type)
 	new_token = (t_token *)ft_calloc(1, sizeof(t_token));
 	if (!new_token)
 	{
-		error_indicator(1, "calloc");
+		ft_putendl_fd("calloc failed", 2);
 		return (NULL);
 	}
 	new_token->value = ft_strdup(value);
 	if (!new_token->value)
 	{
-		error_indicator(1, "dupe value to token");
+		ft_putendl_fd("dupe value to token", 2);
 		free(new_token);
 		return (NULL);
 	}

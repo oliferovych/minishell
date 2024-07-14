@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_node.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:24 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 13:51:42 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/14 12:01:52 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,27 @@ char	*add_quotes(char *str)
 	return (res);
 }
 
-char	*create_redir_node(t_token **token, t_ast **redir_node)
+char	*handle_heredoc(t_token **token, t_ast **redir_node)
 {
-	(*redir_node)->tran = malloc(sizeof(int *));
-	if ((*token)->type == T_DLESS)
+	if (*token && (*token)->type == T_IDENTIFIER)
 	{
-		(*token) = (*token)->next;
-		if (*token && (*token)->type == T_IDENTIFIER)
-		{
-			(*token)->value = add_quotes((*token)->value);
-			(*redir_node)->heredoc = transform_arg(redir_node, (*token), 0);
-			if (!(*redir_node)->heredoc)
-				return (NULL);
-		}
-		else
-			error_indicator(1, "missing heredoc delimiter after << operator");
+		(*token)->value = add_quotes((*token)->value);
+		(*redir_node)->heredoc = transform_arg(redir_node, (*token), 0);
+		if (!(*redir_node)->heredoc)
+			return (NULL);
 	}
-	else if ((*token)->next->type == T_IDENTIFIER)
+	else
+	{
+		*token = NULL;
+		ft_putendl_fd("missing heredoc delimiter after << operator", 2);
+		return (NULL);
+	}
+	return ("c");
+}
+
+char	*handle_file_redirection(t_token **token, t_ast **redir_node)
+{
+	if ((*token)->next && (*token)->next->type == T_IDENTIFIER)
 	{
 		(*token) = (*token)->next;
 		(*redir_node)->filename = transform_arg(redir_node, (*token), 0);
@@ -56,9 +60,30 @@ char	*create_redir_node(t_token **token, t_ast **redir_node)
 			return (NULL);
 	}
 	else
-		error_indicator(1, "Missing file for redirection");
-	*token = (*token)->next;
+	{
+		*token = NULL;
+		return (ft_putendl_fd("Missing file for redirection", 2), NULL);
+	}
 	return ("c");
+}
+
+char	*create_redir_node(t_token **token, t_ast **redir_node)
+{
+	char	*result;
+
+	result = NULL;
+	(*redir_node)->tran = malloc(sizeof(int *));
+	if ((*token)->type == T_DLESS)
+	{
+		(*token) = (*token)->next;
+		result = handle_heredoc(token, redir_node);
+	}
+	else
+		result = handle_file_redirection(token, redir_node);
+	if (result == NULL)
+		return (NULL);
+	*token = (*token)->next;
+	return (result);
 }
 
 int	is_redirection(t_token_type type)

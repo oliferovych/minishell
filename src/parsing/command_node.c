@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_node.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:04:29 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 14:20:45 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/14 11:47:35 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ int	handle_redir(t_token **token, t_ast **node, t_data *data, int arg_count)
 	t_ast	*prev_node;
 
 	prev_node = NULL;
-	handle_r(token, data, node, &prev_node);
+	if (handle_r(token, data, node, &prev_node))
+		return (-1);
 	while (*token && ((*token)->type == T_IDENTIFIER))
 	{
 		(arg_count)++;
@@ -87,6 +88,8 @@ char	*create_command_node(t_token **token, t_ast **node, t_data *data)
 	arg_count = count_args(&curr_token);
 	after_token = curr_token;
 	arg_count = handle_redir(&after_token, &redir_node, data, arg_count);
+	if (arg_count == -1)
+		return (NULL);
 	(*node) = create_ast_node(N_COMMAND, data);
 	if (!allocate_command_memory(node, arg_count))
 		return (NULL);
