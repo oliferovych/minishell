@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_node.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:24 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 12:01:52 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:04:14 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*add_quotes(char *str)
 		res[j++] = str[i++];
 	res[j++] = '\'';
 	res[j] = '\0';
-	free (str);
+	free(str);
 	return (res);
 }
 
@@ -44,7 +44,8 @@ char	*handle_heredoc(t_token **token, t_ast **redir_node)
 	else
 	{
 		*token = NULL;
-		ft_putendl_fd("missing heredoc delimiter after << operator", 2);
+		ft_putendl_fd("minishell: missing heredoc delimiter after << operator",
+			2);
 		return (NULL);
 	}
 	return ("c");
@@ -62,7 +63,8 @@ char	*handle_file_redirection(t_token **token, t_ast **redir_node)
 	else
 	{
 		*token = NULL;
-		return (ft_putendl_fd("Missing file for redirection", 2), NULL);
+		return (ft_putendl_fd("minishell: missing file for redirection", 2),
+			NULL);
 	}
 	return ("c");
 }
@@ -88,8 +90,8 @@ char	*create_redir_node(t_token **token, t_ast **redir_node)
 
 int	is_redirection(t_token_type type)
 {
-	if (type == T_LESS || type == T_GREAT
-		|| type == T_DGREAT || type == T_DLESS)
+	if (type == T_LESS || type == T_GREAT || type == T_DGREAT
+		|| type == T_DLESS)
 		return (1);
 	return (0);
 }

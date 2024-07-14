@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:28:17 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 11:17:17 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 17:56:57 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,15 @@ int	match_token_help(char *input, int *i)
 		(*i)++;
 	if (!input[*i])
 		return (2);
-	if (((input[*i] == '>' || input[*i] == '<')
-			&& (input[*i + 2] == '>' || input[*i + 2] == '<'))
-		|| (input[*i] == '>' && input[*i + 1] == '<')
-		|| (input[*i] == '<' && input[*i + 1] == '>'))
-		{
-			write(2, "syntax error near unexpected token ", 35);
-			write(2, &input[*i], 1);
-			write(2, "\n", 1);
-			return (1);
-		}
+	if (((input[*i] == '>' || input[*i] == '<') && (input[*i + 2] == '>'
+				|| input[*i + 2] == '<')) || (input[*i] == '>' && input[*i
+				+ 1] == '<') || (input[*i] == '<' && input[*i + 1] == '>'))
+	{
+		write(2, "syntax error near unexpected token ", 35);
+		write(2, &input[*i], 1);
+		write(2, "\n", 1);
+		return (1);
+	}
 	return (0);
 }
 

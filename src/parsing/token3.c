@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:31:47 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 17:40:15 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/14 17:56:30 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	check_quotes(char **val, int *quote, int remove)
 	int		comp_res;
 
 	comp_res = compare_quotes(quote, *val, &remove);
-	if ((ft_strstr(*val, "=\"") && quote[1] % 2 == 0)
-		|| (ft_strstr(*val, "=\'") && quote[0] % 2 == 0))
+	if ((ft_strstr(*val, "=\"") && quote[1] % 2 == 0) || (ft_strstr(*val, "=\'")
+			&& quote[0] % 2 == 0))
 	{
 		if (ft_strstr(*val, "=\'") && quote[0] % 2 == 0)
 			remove = 0;
@@ -27,7 +27,7 @@ void	check_quotes(char **val, int *quote, int remove)
 	else if (((quote[0] % 2 != 0 || quote[1] % 2 != 0) && comp_res))
 	{
 		ft_putendl_fd("unexpected EOF while looking for matching quote", 2);
-		free (*val);
+		free(*val);
 		*val = NULL;
 	}
 	bb(*val, &remove);
@@ -85,8 +85,8 @@ void	handle_quotes(char **str)
 			{
 				if (quotes == 2)
 					return ;
-				if ((*str)[i] == '\"' && ((*str)[i + 1])
-					&& (*str)[i + 1] != '$')
+				if ((*str)[i] == '\"' && ((*str)[i + 1]) && (*str)[i
+					+ 1] != '$')
 				{
 					handle_double_quote(str, &i);
 					quotes++;
@@ -109,9 +109,10 @@ char	*process_value(char *input, int *i)
 	count = 0;
 	quote[0] = 0;
 	quote[1] = 0;
-	while ((input[count + j] && ((!ft_isspace(input[count + j]) && input[count + j] != '&' && input[count + j] != '|' && input[count + j] != '>' && input[count + j] != '<')
-			|| (quote[0] % 2 != 0 || quote[1] % 2 != 0)) )
-		&& input[j + count] != ')')
+	while ((input[count + j] && ((!ft_isspace(input[count + j]) && input[count
+						+ j] != '&' && input[count + j] != '|' && input[count
+						+ j] != '>' && input[count + j] != '<') || (quote[0]
+					% 2 != 0 || quote[1] % 2 != 0))) && input[j + count] != ')')
 	{
 		if (input[j + count] == '\'')
 			quote[0]++;

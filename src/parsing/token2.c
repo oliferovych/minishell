@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:14 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 14:17:21 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/14 17:55:08 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,5 @@ int	add_token(t_token **lst, t_token_type type, char *input, int *i)
 	new = ft_new_token(value, type);
 	if (!new)
 		return (free(value), 1);
-	ft_token_list_add_back(lst, new);
-	return (0);
+	return (ft_token_list_add_back(lst, new), 0);
 }

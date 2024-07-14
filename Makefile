@@ -6,7 +6,7 @@
 #    By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/01 17:09:19 by dolifero          #+#    #+#              #
-#    Updated: 2024/06/27 16:33:50 by dolifero         ###   ########.fr        #
+#    Updated: 2024/07/14 17:52:30 by dolifero         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,11 +81,6 @@ clean:
 				make clean -C $(LIBFT_DIR)
 				clear;
 				@echo "$(DEF_COLOR)"
-
-debug:			CFLAGS += -g
-debug:			CFLAGS += -fsanitize=address -fsanitize=undefined -fno-sanitize-recover=all -fsanitize=float-divide-by-zero -fsanitize=float-cast-overflow -fno-sanitize=null -fno-sanitize=alignment
-debug:			CFLAGS += -DDEBUG=1
-debug:			clean all
 
 fclean:	clean
 				@echo "$(CYAN)"
