@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:31:47 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 10:43:35 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 17:36:47 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ char	*process_value(char *input, int *i)
 	count = 0;
 	quote[0] = 0;
 	quote[1] = 0;
-	while (input[count + j] && (!ft_isspace(input[count + j])
-			|| (quote[0] % 2 != 0 || quote[1] % 2 != 0))
+	while ((input[count + j] && ((!ft_isspace(input[count + j]) && input[count + j] != '&' && input[count + j] != '|' )
+			|| (quote[0] % 2 != 0 || quote[1] % 2 != 0)) )
 		&& input[j + count] != ')')
 	{
 		if (input[j + count] == '\'')
@@ -121,6 +121,6 @@ char	*process_value(char *input, int *i)
 	}
 	*i = j + count;
 	value = ft_substr(input, j, count);
-	handle_quotes(&value);
+	value = handle_quotes(value);
 	return (check_value(value, quote));
 }

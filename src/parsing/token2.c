@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:14 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 11:17:29 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 14:17:21 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,18 @@ t_token	*ft_new_token(char *value, t_token_type type)
 		ft_putendl_fd("calloc failed", 2);
 		return (NULL);
 	}
-	new_token->value = ft_strdup(value);
-	if (!new_token->value)
+	if (!value)
+		new_token->value = NULL;
+	else
 	{
-		ft_putendl_fd("dupe value to token", 2);
-		free(new_token);
-		return (NULL);
+		new_token->value = ft_strdup(value);
+		free(value);
+		if (!new_token->value)
+		{
+			ft_putendl_fd("dupe value to token", 2);
+			free(new_token);
+			return (NULL);
+		}
 	}
 	new_token->type = type;
 	return (new_token);
@@ -41,23 +47,24 @@ int	add_token(t_token **lst, t_token_type type, char *input, int *i)
 	if (type == T_OPAR || type == T_CPAR
 		|| type == T_PIPE || type == T_GREAT || type == T_LESS)
 	{
-		value = ft_substr(input, *i, 1);
+		value = NULL;
 		(*i)++;
 	}
 	else if (type == T_DGREAT || type == T_DLESS
 		|| type == T_OR || type == T_AND)
 	{
-		value = ft_substr(input, *i, 2);
+		value = NULL;
 		(*i) += 2;
 	}
 	else
+	{
 		value = process_value(input, i);
-	if (!value)
-		return (1);
+		if (!value)
+			return (1);
+	}
 	new = ft_new_token(value, type);
 	if (!new)
 		return (free(value), 1);
-	free(value);
 	ft_token_list_add_back(lst, new);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/14 15:32:42 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/14 17:35:48 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,13 @@ int	main(int argc, char **argv, char **envp)
 		ast = parse(&token, data);
 		// printf("\n\n");
 		// print_ast(ast);
-		if (!evaluate_ast(ast, 1))
+		if (!ast)
+		{
+			free(data->prompt);
+			free(data->input);
+			free_tokens(token);
+		}
+		else if (!evaluate_ast(ast, 1))
 		{
 			data->env = ast->ms.env;
 			data->exp = ast->ms.exp;
