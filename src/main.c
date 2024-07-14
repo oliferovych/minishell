@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/14 17:35:48 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/14 18:01:48 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	leaks(void)
-{
-	system("leaks minishell");
-}
 
 static t_data	*data_init(char **envp)
 {
@@ -58,16 +53,21 @@ static void	get_input(t_data *data)
 	add_history(data->input);
 }
 
+static void	free_data(t_data *data, t_token *token)
+{
+	free(data->prompt);
+	free(data->input);
+	free_tokens(token);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_ast	*ast;
 	t_token	*token;
-	// t_token	*tmp;
 	t_data	*data;
 
 	(void)argc;
 	(void)argv;
-	// atexit(leaks);
 	ft_initialize_signals();
 	data = data_init(envp);
 	ast = ft_get_ast();
@@ -76,17 +76,9 @@ int	main(int argc, char **argv, char **envp)
 		ast = NULL;
 		get_input(data);
 		token = get_token(data->input);
-		// tmp = token;
-		// print_token(tmp);
 		ast = parse(&token, data);
-		// printf("\n\n");
-		// print_ast(ast);
 		if (!ast)
-		{
-			free(data->prompt);
-			free(data->input);
-			free_tokens(token);
-		}
+			free_data(data, token);
 		else if (!evaluate_ast(ast, 1))
 		{
 			data->env = ast->ms.env;
