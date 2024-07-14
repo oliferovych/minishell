@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 01:10:18 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 09:38:53 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*transform_arg_single_quote(char *str, int *i, int k, t_ast **node)
 	while (str[*i] && str[*i] != '\'')
 		(*i)++;
 	if (count == 4)
-	 (*i)++;
+		(*i)++;
 	tmp = ft_substr(str, j, *i - j);
 	if (str[*i])
 		(*i)++;
@@ -42,16 +42,15 @@ char	*transform_argiables(char *str, int *i, t_ast **node)
 
 	(*i)++;
 	j = *i;
-	while (str[(*i)] && (isalnum(str[(*i)]) || str[*i] != '?'))
-	{
+	while (str[*i] && (isalnum(str[*i])))
 		(*i)++;
-	}
 	if (str[*i] == '?')
 	{
 		tmp = ft_itoa((*node)->ms.exit_code);
 		(*i)++;
+		return (tmp);
 	}
-	else if (variable_exists2((*node)->ms.env, ft_substr(str, j, *i - j)) != -1)
+	if (variable_exists2((*node)->ms.env, ft_substr(str, j, *i - j)) != -1)
 		tmp = strcutoff_front((*node)->ms.env[variable_exists2((*node)->ms.env,
 					ft_substr(str, j, *i - j))], '=');
 	else
@@ -75,6 +74,7 @@ char	*transform_arg_sub(t_ast **node, char *str, int k, char *res)
 {
 	char	*tmp;
 	int		i;
+
 	i = 0;
 	while (str[i])
 	{
@@ -97,37 +97,11 @@ char	*transform_arg_sub(t_ast **node, char *str, int k, char *res)
 	return (res);
 }
 
-void	check_for_var(char **res, int flag)
-{
-	char *str;
-
-	str = *res;
-	if (str[0] == '\"' && str[1] == '$' && str[ft_strlen(str) - 1] == '\"' && str[ft_strlen(str) - 2] == '\'')
-		*res = remove_char(ft_strdup(str), '\'');
-	if (flag)
-		double_single_quotes(res);
-}
-
-char	*set_flag(char *str, int *flag)
-{
-	int count;
-
-	count = count_single_quotes(str);
-	if (count == 4 && str[0] == '\'' && str[1] == '\'' && str[2] == '$' && str[ft_strlen(str) - 1] == '\'' && str[ft_strlen(str) - 2] == '\'')
-	{
-		str = remove_char(ft_strdup(str), '\'');
-		*flag = 1;
-	}
-	else
-		*flag = 0;
-	return (str);
-}
-
 char	*transform_arg(t_ast **node, t_token *token, int k)
 {
 	char	*str;
 	char	*res;
-	int flag;
+	int		flag;
 
 	str = token->value;
 	if (!str)
