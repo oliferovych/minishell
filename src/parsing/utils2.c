@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:20:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 22:08:43 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:34:05 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,15 @@ void	check_for_var(char **res, int flag)
 	str = *res;
 	if (str[0] == '\"' && str[1] == '$' && str[ft_strlen(str) - 1] == '\"'
 		&& str[ft_strlen(str) - 2] == '\'')
-		*res = remove_char(ft_strdup(str), '\'');
+		*res = remove_char(str, '\'');
 	if (flag)
 		add_double_single_quotes(res);
 }
 
 char	*set_str(t_token *token, int *flag)
 {
-	int	count;
-	char *str;
+	int		count;
+	char	*str;
 
 	str = ft_strdup(token->value);
 	if (!str)

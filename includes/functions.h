@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/14 22:09:07 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:26:47 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void			free_tokens(t_token *token);
 int				ft_isspace(int c);
 
 //PARSING
-t_ast			*parse(t_token **token, t_data *old_data);
+t_ast			*parse(t_token *token_o, t_data *old_data);
 void			print_ast(t_ast *node);
 void			free_ast(t_ast *node);
 int				error_indicator(int i, char *str);

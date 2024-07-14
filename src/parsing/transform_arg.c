@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 22:09:27 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 22:28:47 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ char	*transform_arg(t_ast **node, t_token *token, int k)
 	char	*str;
 	int		flag;
 
-	
 	str = set_str(token, &flag);
 	res = ft_strdup("");
 	(*node)->tran[k] = malloc(sizeof(int));

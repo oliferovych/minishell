@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:04:38 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 11:36:36 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:38:32 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_ast	*led(t_ast *left, t_token **token, t_data *data)
 		{
 			node->right = expr(prec, token, data);
 			if (!node->right)
-				return (NULL);
+				return (free_ast(node), NULL);
 		}
 	}
 	return (node);
@@ -86,11 +86,13 @@ t_ast	*expr(int prec, t_token **token, t_data *data)
 	return (left);
 }
 
-t_ast	*parse(t_token **token, t_data *old_data)
+t_ast	*parse(t_token *token_o, t_data *old_data)
 {
 	t_ast	*node;
 	t_data	*data;
+	t_token	*token;
 
+	token = token_o;
 	data = NULL;
 	node = NULL;
 	data = malloc(sizeof(t_data));
@@ -98,13 +100,13 @@ t_ast	*parse(t_token **token, t_data *old_data)
 		return (NULL);
 	data->prompt = old_data->prompt;
 	data->input = old_data->input;
-	data->token = *token;
+	data->token = token;
 	data->env = old_data->env;
 	data->exp = old_data->exp;
 	data->exit_code = old_data->exit_code;
-	if (!(*token))
+	if (!(token))
 		return (NULL);
-	node = expr(3, token, data);
+	node = expr(3, &token, data);
 	if (!node)
 	{
 		return (free(data), NULL);
