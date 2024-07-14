@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 14:31:47 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/12 14:00:09 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/14 17:40:15 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@ void	check_quotes(char **val, int *quote, int remove)
 	}
 	else if (((quote[0] % 2 != 0 || quote[1] % 2 != 0) && comp_res))
 	{
-		ft_printf("unexpected EOF while looking for matching quote\n");
+		ft_putendl_fd("unexpected EOF while looking for matching quote", 2);
 		free (*val);
 		*val = NULL;
 	}
-	if (remove && comp_res == 0)
+	bb(*val, &remove);
+	if (aa(val) || (remove && comp_res == 0))
 		*val = remove_char(*val, '\"');
 	else
 	{
@@ -43,7 +44,7 @@ void	check_quotes(char **val, int *quote, int remove)
 char	*check_value(char *val, int *quote)
 {
 	if (!val)
-		return (error_indicator(1, "substr"), NULL);
+		return (NULL);
 	check_quotes(&val, quote, 1);
 	return (val);
 }
@@ -108,8 +109,8 @@ char	*process_value(char *input, int *i)
 	count = 0;
 	quote[0] = 0;
 	quote[1] = 0;
-	while (input[count + j] && (!ft_isspace(input[count + j])
-			|| (quote[0] % 2 != 0 || quote[1] % 2 != 0))
+	while ((input[count + j] && ((!ft_isspace(input[count + j]) && input[count + j] != '&' && input[count + j] != '|' && input[count + j] != '>' && input[count + j] != '<')
+			|| (quote[0] % 2 != 0 || quote[1] % 2 != 0)) )
 		&& input[j + count] != ')')
 	{
 		if (input[j + count] == '\'')

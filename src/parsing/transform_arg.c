@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/11 21:03:46 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 09:38:53 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ char	*transform_arg_single_quote(char *str, int *i, int k, t_ast **node)
 	if (count % 2 == 0)
 		(*i)++;
 	j = *i;
-	if (count % 2 != 0)
+	if (count % 2 != 0 || count == 4)
 		(*i)++;
 	while (str[*i] && str[*i] != '\'')
+		(*i)++;
+	if (count == 4)
 		(*i)++;
 	tmp = ft_substr(str, j, *i - j);
 	if (str[*i])
@@ -40,16 +42,15 @@ char	*transform_argiables(char *str, int *i, t_ast **node)
 
 	(*i)++;
 	j = *i;
-	while (str[*i] && (isalnum(str[*i]) || str[*i] != '?'))
-	{
+	while (str[*i] && (isalnum(str[*i])))
 		(*i)++;
-	}
 	if (str[*i] == '?')
 	{
 		tmp = ft_itoa((*node)->ms.exit_code);
 		(*i)++;
+		return (tmp);
 	}
-	else if (variable_exists2((*node)->ms.env, ft_substr(str, j, *i - j)) != -1)
+	if (variable_exists2((*node)->ms.env, ft_substr(str, j, *i - j)) != -1)
 		tmp = strcutoff_front((*node)->ms.env[variable_exists2((*node)->ms.env,
 					ft_substr(str, j, *i - j))], '=');
 	else
@@ -100,14 +101,18 @@ char	*transform_arg(t_ast **node, t_token *token, int k)
 {
 	char	*str;
 	char	*res;
+	int		flag;
 
 	str = token->value;
 	if (!str)
 		return (NULL);
+	str = set_flag(str, &flag);
 	res = ft_strdup("");
 	(*node)->tran[k] = malloc(sizeof(int));
 	if (!(*node)->tran[k] || !res)
 		return (NULL);
 	(*node)->tran[k][0] = 1;
-	return (transform_arg_sub(node, str, k, res));
+	res = transform_arg_sub(node, str, k, res);
+	check_for_var(&res, flag);
+	return (res);
 }

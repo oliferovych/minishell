@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 17:27:12 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 17:36:45 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/14 14:32:49 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	check_string(const char *str)
 {
 	int	i;
 
-	if (is_digit(str[0]))
+	if (is_digit(str[0]) || !is_alpha(str[0]))
 	{
 		ft_putstr_fd("export: ", 2);
 		ft_putstr_fd((char *)str, 2);

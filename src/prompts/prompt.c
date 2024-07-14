@@ -6,7 +6,7 @@
 /*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:52:33 by dolifero          #+#    #+#             */
-/*   Updated: 2024/06/20 16:26:47 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/14 17:28:16 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,19 @@ char	*get_prompt(void)
 	dir_path = getcwd(NULL, 0);
 	prompt = trim_dir_path(dir_path);
 	free(dir_path);
-	prompt_no_arr = ft_strjoin("minishell ", prompt);
-	free(prompt);
-	prompt = ft_strjoin(prompt_no_arr, " > ");
+	if (FANCY)
+	{
+		prompt_no_arr = ft_strjoin("\033[1;97mminishell\033[0;39m \033[2;96m",
+				prompt);
+		free(prompt);
+		prompt = ft_strjoin(prompt_no_arr, "\033[0;39m\033[1;97m > \033[0;39m");
+	}
+	else
+	{
+		prompt_no_arr = ft_strjoin("minishell ", prompt);
+		free(prompt);
+		prompt = ft_strjoin(prompt_no_arr, " > ");
+	}
 	free(prompt_no_arr);
 	return (prompt);
 }

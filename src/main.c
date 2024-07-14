@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/12 14:20:32 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/14 17:35:48 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	get_input(t_data *data)
 	data->input = readline(data->prompt);
 	if (!data->input)
 	{
-		ft_printf("readline failed\n");
+		ft_printf("%sexit\n", data->prompt);
 		free(data->prompt);
 		free(data->input);
 		free_environment(data->env);
@@ -81,7 +81,13 @@ int	main(int argc, char **argv, char **envp)
 		ast = parse(&token, data);
 		// printf("\n\n");
 		// print_ast(ast);
-		if (!evaluate_ast(ast, 1))
+		if (!ast)
+		{
+			free(data->prompt);
+			free(data->input);
+			free_tokens(token);
+		}
+		else if (!evaluate_ast(ast, 1))
 		{
 			data->env = ast->ms.env;
 			data->exp = ast->ms.exp;

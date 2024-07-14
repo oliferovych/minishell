@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:09 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/09 22:53:01 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 11:53:13 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ void	handle_parentheses(t_token **token, t_ast **node, t_data *data)
 	if ((*token) && (*token)->type == T_CPAR)
 		(*token) = (*token)->next;
 	else
-		error_indicator(1, "parenthesis do not close");
+		ft_putendl_fd("parenthesis do not close", 2);
 }
 
-void	handle_r(t_token **token, t_data *data, t_ast **node, t_ast **prev_node)
+int	handle_r(t_token **token, t_data *data, t_ast **node, t_ast **prev_node)
 {
 	t_ast	*redir_node;
 
@@ -73,13 +73,15 @@ void	handle_r(t_token **token, t_data *data, t_ast **node, t_ast **prev_node)
 	while (*token && (is_redirection((*token)->type)))
 	{
 		create_node((*token)->type, &redir_node, data);
-		create_redir_node(token, &redir_node);
+		if (create_redir_node(token, &redir_node) == NULL)
+			return (1);
 		if (*prev_node)
 			(*prev_node)->left = redir_node;
 		else
 			*node = redir_node;
 		(*prev_node) = redir_node;
 	}
+	return (0);
 }
 
 void	handle_c(t_token **token, t_data *data, t_ast **node, t_ast **prev_redi)
