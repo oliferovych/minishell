@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:54:47 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/14 22:37:30 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/16 18:52:40 by dolifero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # include "functions.h"
 
 # ifndef FANCY
-#  define FANCY 0
+#  define FANCY 1
 # endif
 
 #endif

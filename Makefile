@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+         #
+#    By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/01 17:09:19 by dolifero          #+#    #+#              #
-#    Updated: 2024/07/14 22:36:10 by tomecker         ###   ########.fr        #
+#    Updated: 2024/07/16 18:51:59 by dolifero         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,8 +33,6 @@ SUBDIRS			=	parsing\
 
 SRC_FILES		= $(SRC_DIR)/main.c $(foreach dir, $(SUBDIRS), $(wildcard $(SRC_DIR)/$(dir)/*.c))
 OBJ_FILES		= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
-
-all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIBFT)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
@@ -67,7 +65,7 @@ CYAN		=	\033[2;96m
 BR_CYAN		=	\033[0;96m
 WHITE		=	\033[0;97m
 
-all:			
+all:			$(NAME)
 				clear;
 				@$(MAKE) SHELL_CYAN
 				@$(MAKE) loading
