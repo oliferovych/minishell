@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/14 11:51:16 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:26:47 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void			free_tokens(t_token *token);
 int				ft_isspace(int c);
 
 //PARSING
-t_ast			*parse(t_token **token, t_data *old_data);
+t_ast			*parse(t_token *token_o, t_data *old_data);
 void			print_ast(t_ast *node);
 void			free_ast(t_ast *node);
 int				error_indicator(int i, char *str);
@@ -40,7 +40,7 @@ char			*create_command_node(t_token **token,
 					t_ast **node, t_data *data);
 int				handle_r(t_token **token, t_data *data,
 					t_ast **node, t_ast **prev_node);
-void			handle_c(t_token **token, t_data *data,
+int				handle_c(t_token **token, t_data *data,
 					t_ast **node, t_ast **prev_redi);
 int				is_redirection(t_token_type type);
 void			link_redir_nodes(t_ast **redir_node, t_ast **command_node);
@@ -52,7 +52,7 @@ int				count_single_quotes(char *str);
 char			*transform_argiables(char *str, int *i, t_ast **node);
 char			*transform_variable(char *line, t_ast *ast);
 void			double_single_quotes(char **val);
-char			*set_flag(char *str, int *flag);
+char			*set_str(t_token *token, int *flag);
 void			check_for_var(char **res, int flag);
 void			bb(const char *str, int *remove);
 int				aa(char **val);

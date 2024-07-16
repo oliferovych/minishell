@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 17:08:26 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/12 16:42:51 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:13:07 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	free_tokens(t_token *token)
 	{
 		tmp = token;
 		token = token->next;
-		free(tmp->value);
+		if (tmp->value)
+			free(tmp->value);
 		tmp->value = NULL;
 		free(tmp);
 	}

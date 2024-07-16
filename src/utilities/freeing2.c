@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 17:07:48 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/10 17:09:18 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:05:09 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	free_command(t_ast *node, int i)
 		while (node->args[i])
 		{
 			free(node->args[i]);
+			node->args[i] = NULL;
 			if (node->tran[i])
 				free(node->tran[i]);
 			i++;

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+         #
+#    By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/01 17:09:19 by dolifero          #+#    #+#              #
-#    Updated: 2024/07/14 17:52:30 by dolifero         ###   ########.fr        #
+#    Updated: 2024/07/14 22:36:10 by tomecker         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ CYAN		=	\033[2;96m
 BR_CYAN		=	\033[0;96m
 WHITE		=	\033[0;97m
 
-all:			$(NAME)
+all:			
 				clear;
 				@$(MAKE) SHELL_CYAN
 				@$(MAKE) loading

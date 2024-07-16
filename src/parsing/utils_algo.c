@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:09 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 11:53:13 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 22:11:17 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	handle_r(t_token **token, t_data *data, t_ast **node, t_ast **prev_node)
 	{
 		create_node((*token)->type, &redir_node, data);
 		if (create_redir_node(token, &redir_node) == NULL)
-			return (1);
+			return (free(redir_node), 1);
 		if (*prev_node)
 			(*prev_node)->left = redir_node;
 		else
@@ -84,16 +84,20 @@ int	handle_r(t_token **token, t_data *data, t_ast **node, t_ast **prev_node)
 	return (0);
 }
 
-void	handle_c(t_token **token, t_data *data, t_ast **node, t_ast **prev_redi)
+int	handle_c(t_token **token, t_data *data, t_ast **node, t_ast **prev_redi)
 {
 	t_ast	*cmd_node;
 
 	cmd_node = NULL;
 	if (!(*token))
-		return ;
+		return (1);
 	if ((*token)->type == T_IDENTIFIER)
 	{
-		create_command_node(token, &cmd_node, data);
+		if (!create_command_node(token, &cmd_node, data))
+		{
+			*node = NULL;
+			return (1);
+		}
 		if (*prev_redi)
 			(*prev_redi)->left = cmd_node;
 		else
@@ -101,4 +105,5 @@ void	handle_c(t_token **token, t_data *data, t_ast **node, t_ast **prev_redi)
 	}
 	else if ((*token)->type == T_OPAR)
 		handle_parentheses(token, node, data);
+	return (0);
 }

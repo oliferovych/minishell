@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_node.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:24 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 18:04:14 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/14 21:27:29 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*create_redir_node(t_token **token, t_ast **redir_node)
 	else
 		result = handle_file_redirection(token, redir_node);
 	if (result == NULL)
-		return (NULL);
+		return (free((*redir_node)->tran), NULL);
 	*token = (*token)->next;
 	return (result);
 }

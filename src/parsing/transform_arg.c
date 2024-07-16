@@ -6,7 +6,7 @@
 /*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:07:19 by tecker            #+#    #+#             */
-/*   Updated: 2024/07/14 09:38:53 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/14 22:28:47 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,11 @@ char	*transform_arg_sub(t_ast **node, char *str, int k, char *res)
 
 char	*transform_arg(t_ast **node, t_token *token, int k)
 {
-	char	*str;
 	char	*res;
+	char	*str;
 	int		flag;
 
-	str = token->value;
-	if (!str)
-		return (NULL);
-	str = set_flag(str, &flag);
+	str = set_str(token, &flag);
 	res = ft_strdup("");
 	(*node)->tran[k] = malloc(sizeof(int));
 	if (!(*node)->tran[k] || !res)
@@ -114,5 +111,6 @@ char	*transform_arg(t_ast **node, t_token *token, int k)
 	(*node)->tran[k][0] = 1;
 	res = transform_arg_sub(node, str, k, res);
 	check_for_var(&res, flag);
+	free(str);
 	return (res);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dolifero <dolifero@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/14 18:01:48 by dolifero         ###   ########.fr       */
+/*   Updated: 2024/07/14 23:26:28 by tomecker         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	main(int argc, char **argv, char **envp)
 		ast = NULL;
 		get_input(data);
 		token = get_token(data->input);
-		ast = parse(&token, data);
+		ast = parse(token, data);
 		if (!ast)
 			free_data(data, token);
 		else if (!evaluate_ast(ast, 1))
