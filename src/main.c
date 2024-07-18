@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:54:07 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/14 23:26:28 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/18 13:17:58 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,29 @@ static void	free_data(t_data *data, t_token *token)
 	free_tokens(token);
 }
 
+void	handle_input_loop(t_ast *ast, t_data *data, t_token *token)
+{
+	while (1)
+	{
+		ast = NULL;
+		get_input(data);
+		if (check_input(data))
+		{
+			token = get_token(data->input);
+			ast = parse(token, data);
+			if (!ast)
+				free_data(data, token);
+			else if (!evaluate_ast(ast, 1))
+			{
+				data->env = ast->ms.env;
+				data->exp = ast->ms.exp;
+				data->exit_code = ast->ms.exit_code;
+			}
+			free_all(ast, 0);
+		}
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_ast	*ast;
@@ -71,20 +94,6 @@ int	main(int argc, char **argv, char **envp)
 	ft_initialize_signals();
 	data = data_init(envp);
 	ast = ft_get_ast();
-	while (1)
-	{
-		ast = NULL;
-		get_input(data);
-		token = get_token(data->input);
-		ast = parse(token, data);
-		if (!ast)
-			free_data(data, token);
-		else if (!evaluate_ast(ast, 1))
-		{
-			data->env = ast->ms.env;
-			data->exp = ast->ms.exp;
-			data->exit_code = ast->ms.exit_code;
-		}
-		free_all(ast, 0);
-	}
+	token = NULL;
+	handle_input_loop(ast, data, token);
 }

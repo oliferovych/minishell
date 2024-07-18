@@ -6,7 +6,7 @@
 /*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 17:09:47 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/12 14:01:40 by tecker           ###   ########.fr       */
+/*   Updated: 2024/07/18 13:13:25 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,28 @@ void	free_double_array_char(char **array)
 	while (array[i])
 		free(array[i++]);
 	free(array);
+}
+
+int	check_input(t_data *data)
+{
+	int		i;
+	char	*str;
+
+	str = data->input;
+	i = 0;
+	if (str[0] == '\0')
+	{
+		free(data->input);
+		free(data->prompt);
+		return (0);
+	}
+	while (str[i])
+	{
+		if (!ft_isspace(str[i]))
+			return (1);
+		i++;
+	}
+	free(data->input);
+	free(data->prompt);
+	return (0);
 }

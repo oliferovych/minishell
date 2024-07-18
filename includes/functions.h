@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tomecker <tomecker@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tecker <tecker@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:55:24 by dolifero          #+#    #+#             */
-/*   Updated: 2024/07/14 23:26:47 by tomecker         ###   ########.fr       */
+/*   Updated: 2024/07/18 13:12:30 by tecker           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FUNCTIONS_H
 
 # include "minishell.h"
+
 //MINISHELL PROMPT
 char			*get_prompt(void);
 char			*trim_dir_path(char *dir_path);
@@ -114,6 +115,7 @@ char			*remove_char(char *str, char char_to_remove);
 void			free_double_array_char(char **array);
 void			free_command(t_ast *node, int i);
 int				check_string(const char *str);
+int				check_input(t_data *data);
 
 //WILDCARDS
 char			*handle_wildcards(char *str);
